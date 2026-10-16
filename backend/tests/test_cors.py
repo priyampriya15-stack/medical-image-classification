@@ -13,6 +13,7 @@ def test_cors_preflight():
         "http://localhost:5175",
         "http://127.0.0.1:5175",
         "https://medai-frontend.onrender.com",
+        "https://medai-frontend.vercel.app",
     ]:
         response = client.options(
             "/api/health",
