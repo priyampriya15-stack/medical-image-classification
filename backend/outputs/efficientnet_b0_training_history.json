@@ -1,0 +1,57 @@
+{
+  "model_name": "efficientnet_b0",
+  "total_epochs": 5,
+  "best_val_acc": 0.9313,
+  "best_epoch": 3,
+  "total_duration_seconds": 486.9,
+  "config": {
+    "model_name": "efficientnet_b0",
+    "epochs": 5,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "optimizer": "AdamW",
+    "fine_tune": true
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.3451,
+      "train_acc": 0.8471,
+      "val_loss": 0.3035,
+      "val_acc": 0.876,
+      "epoch_duration_seconds": 100.44
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.2205,
+      "train_acc": 0.9146,
+      "val_loss": 0.228,
+      "val_acc": 0.9084,
+      "epoch_duration_seconds": 98.48
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.1897,
+      "train_acc": 0.9242,
+      "val_loss": 0.1762,
+      "val_acc": 0.9313,
+      "epoch_duration_seconds": 87.42
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.1598,
+      "train_acc": 0.935,
+      "val_loss": 0.1769,
+      "val_acc": 0.9313,
+      "epoch_duration_seconds": 99.81
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.1521,
+      "train_acc": 0.9399,
+      "val_loss": 0.2071,
+      "val_acc": 0.9141,
+      "epoch_duration_seconds": 99.28
+    }
+  ]
+}

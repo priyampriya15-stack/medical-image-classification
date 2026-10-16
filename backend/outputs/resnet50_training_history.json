@@ -1,0 +1,57 @@
+{
+  "model_name": "resnet50",
+  "total_epochs": 5,
+  "best_val_acc": 0.9542,
+  "best_epoch": 5,
+  "total_duration_seconds": 798.04,
+  "config": {
+    "model_name": "resnet50",
+    "epochs": 5,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "optimizer": "AdamW",
+    "fine_tune": true
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.3824,
+      "train_acc": 0.825,
+      "val_loss": 0.9809,
+      "val_acc": 0.9141,
+      "epoch_duration_seconds": 150.59
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.2111,
+      "train_acc": 0.9153,
+      "val_loss": 1.3973,
+      "val_acc": 0.9198,
+      "epoch_duration_seconds": 162.22
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.1677,
+      "train_acc": 0.9359,
+      "val_loss": 0.5125,
+      "val_acc": 0.937,
+      "epoch_duration_seconds": 161.39
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.1365,
+      "train_acc": 0.946,
+      "val_loss": 2.9645,
+      "val_acc": 0.9447,
+      "epoch_duration_seconds": 165.6
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.1018,
+      "train_acc": 0.9616,
+      "val_loss": 3.3928,
+      "val_acc": 0.9542,
+      "epoch_duration_seconds": 155.16
+    }
+  ]
+}

@@ -1,0 +1,1227 @@
+[
+  {
+    "id": "act-1792142097715",
+    "timestamp": "2026-10-16T09:14:57.715160+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 374.09
+    }
+  },
+  {
+    "id": "act-1792142097240",
+    "timestamp": "2026-10-16T09:14:57.240807+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 821.86
+    }
+  },
+  {
+    "id": "act-1792142096327",
+    "timestamp": "2026-10-16T09:14:56.328001+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (133.9ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 133.87
+    }
+  },
+  {
+    "id": "act-1792142096167",
+    "timestamp": "2026-10-16T09:14:56.167765+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (219.7ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 219.7
+    }
+  },
+  {
+    "id": "act-1792141553548",
+    "timestamp": "2026-10-16T09:05:53.548152+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 540.62
+    }
+  },
+  {
+    "id": "act-1792141552944",
+    "timestamp": "2026-10-16T09:05:52.944945+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 1009.55
+    }
+  },
+  {
+    "id": "act-1792141551854",
+    "timestamp": "2026-10-16T09:05:51.854420+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (143.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 143.43
+    }
+  },
+  {
+    "id": "act-1792141551674",
+    "timestamp": "2026-10-16T09:05:51.674712+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (489.6ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 489.55
+    }
+  },
+  {
+    "id": "act-1792140270162",
+    "timestamp": "2026-10-16T08:44:30.162572+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 363.99
+    }
+  },
+  {
+    "id": "act-1792140269734",
+    "timestamp": "2026-10-16T08:44:29.734434+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 925.2
+    }
+  },
+  {
+    "id": "act-1792140268718",
+    "timestamp": "2026-10-16T08:44:28.718760+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (136.0ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 136.01
+    }
+  },
+  {
+    "id": "act-1792140268554",
+    "timestamp": "2026-10-16T08:44:28.554199+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (221.9ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 221.94
+    }
+  },
+  {
+    "id": "act-1792139947113",
+    "timestamp": "2026-10-16T08:39:07.113862+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 97.05% confidence (246.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9704924821853638,
+      "inference_time_ms": 246.25
+    }
+  },
+  {
+    "id": "act-1792139359844",
+    "timestamp": "2026-10-16T08:29:19.844466+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 669.3
+    }
+  },
+  {
+    "id": "act-1792139359099",
+    "timestamp": "2026-10-16T08:29:19.099441+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 950.11
+    }
+  },
+  {
+    "id": "act-1792139358052",
+    "timestamp": "2026-10-16T08:29:18.052788+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (156.6ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 156.59
+    }
+  },
+  {
+    "id": "act-1792139357855",
+    "timestamp": "2026-10-16T08:29:17.855444+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (545.1ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 545.11
+    }
+  },
+  {
+    "id": "act-1792136658408",
+    "timestamp": "2026-10-16T07:44:18.408708+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 942.23
+    }
+  },
+  {
+    "id": "act-1792136657335",
+    "timestamp": "2026-10-16T07:44:17.335377+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 3160.07
+    }
+  },
+  {
+    "id": "act-1792136654035",
+    "timestamp": "2026-10-16T07:44:14.035272+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (134.7ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 134.74
+    }
+  },
+  {
+    "id": "act-1792136653866",
+    "timestamp": "2026-10-16T07:44:13.866973+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (1512.9ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 1512.92
+    }
+  },
+  {
+    "id": "act-1792135658859",
+    "timestamp": "2026-10-16T07:27:38.859215+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 645.29
+    }
+  },
+  {
+    "id": "act-1792135658134",
+    "timestamp": "2026-10-16T07:27:38.134064+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 913.95
+    }
+  },
+  {
+    "id": "act-1792135657171",
+    "timestamp": "2026-10-16T07:27:37.171116+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (43.3ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 43.26
+    }
+  },
+  {
+    "id": "act-1792135657106",
+    "timestamp": "2026-10-16T07:27:37.106894+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (30.5ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 30.52
+    }
+  },
+  {
+    "id": "act-1792135338523",
+    "timestamp": "2026-10-16T07:22:18.523202+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 487.95
+    }
+  },
+  {
+    "id": "act-1792135337954",
+    "timestamp": "2026-10-16T07:22:17.954685+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 1088.56
+    }
+  },
+  {
+    "id": "act-1792135336773",
+    "timestamp": "2026-10-16T07:22:16.773846+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (110.1ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 110.1
+    }
+  },
+  {
+    "id": "act-1792135336183",
+    "timestamp": "2026-10-16T07:22:16.183315+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (270.8ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 270.84
+    }
+  },
+  {
+    "id": "act-1792134041289",
+    "timestamp": "2026-10-16T07:00:41.289111+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (27.1ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 27.12
+    }
+  },
+  {
+    "id": "act-1792134040839",
+    "timestamp": "2026-10-16T07:00:40.839627+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (34.6ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 34.57
+    }
+  },
+  {
+    "id": "act-1792134039552",
+    "timestamp": "2026-10-16T07:00:39.552299+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 95.26% confidence (0.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.9525741338729858,
+      "inference_time_ms": 0.2
+    }
+  },
+  {
+    "id": "act-1792134039531",
+    "timestamp": "2026-10-16T07:00:39.531140+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 90.00% confidence (11.7ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.8999999761581421,
+      "inference_time_ms": 11.66
+    }
+  },
+  {
+    "id": "act-1792134038732",
+    "timestamp": "2026-10-16T07:00:38.732359+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 88.76% confidence (18.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.8876,
+      "inference_time_ms": 18.4
+    }
+  },
+  {
+    "id": "act-1792134038707",
+    "timestamp": "2026-10-16T07:00:38.707068+00:00",
+    "event_type": "TRAINING_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Test training completed",
+    "metadata": {
+      "val_acc": 0.95
+    }
+  },
+  {
+    "id": "act-1792134038661",
+    "timestamp": "2026-10-16T07:00:38.661419+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 262.55
+    }
+  },
+  {
+    "id": "act-1792134037959",
+    "timestamp": "2026-10-16T07:00:37.959956+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 465.92
+    }
+  },
+  {
+    "id": "act-1792133983179",
+    "timestamp": "2026-10-16T06:59:43.179283+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 516.9
+    }
+  },
+  {
+    "id": "act-1792133982593",
+    "timestamp": "2026-10-16T06:59:42.593169+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 823.76
+    }
+  },
+  {
+    "id": "act-1792133981723",
+    "timestamp": "2026-10-16T06:59:41.723825+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (84.8ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 84.83
+    }
+  },
+  {
+    "id": "act-1792133980991",
+    "timestamp": "2026-10-16T06:59:40.991710+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (1851.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 1851.25
+    }
+  },
+  {
+    "id": "act-1792133570585",
+    "timestamp": "2026-10-16T06:52:50.585787+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (53.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 53.25
+    }
+  },
+  {
+    "id": "act-1792133569703",
+    "timestamp": "2026-10-16T06:52:49.703394+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (139.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 139.15
+    }
+  },
+  {
+    "id": "act-1792133567005",
+    "timestamp": "2026-10-16T06:52:47.005144+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 95.26% confidence (0.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.9525741338729858,
+      "inference_time_ms": 0.18
+    }
+  },
+  {
+    "id": "act-1792133566983",
+    "timestamp": "2026-10-16T06:52:46.983735+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 90.00% confidence (12.9ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.8999999761581421,
+      "inference_time_ms": 12.95
+    }
+  },
+  {
+    "id": "act-1792133566193",
+    "timestamp": "2026-10-16T06:52:46.193751+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 88.76% confidence (18.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.8876,
+      "inference_time_ms": 18.4
+    }
+  },
+  {
+    "id": "act-1792133566173",
+    "timestamp": "2026-10-16T06:52:46.173359+00:00",
+    "event_type": "TRAINING_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Test training completed",
+    "metadata": {
+      "val_acc": 0.95
+    }
+  },
+  {
+    "id": "act-1792133566135",
+    "timestamp": "2026-10-16T06:52:46.135436+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 296.61
+    }
+  },
+  {
+    "id": "act-1792133565347",
+    "timestamp": "2026-10-16T06:52:45.347983+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 789.65
+    }
+  },
+  {
+    "id": "act-1792133533989",
+    "timestamp": "2026-10-16T06:52:13.989953+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 401.66
+    }
+  },
+  {
+    "id": "act-1792133533526",
+    "timestamp": "2026-10-16T06:52:13.526867+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 843.42
+    }
+  },
+  {
+    "id": "act-1792133532633",
+    "timestamp": "2026-10-16T06:52:12.633902+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (71.6ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 71.61
+    }
+  },
+  {
+    "id": "act-1792133532047",
+    "timestamp": "2026-10-16T06:52:12.047481+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (161.1ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 161.09
+    }
+  },
+  {
+    "id": "act-1792132851728",
+    "timestamp": "2026-10-16T06:40:51.728342+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (33.0ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 33.03
+    }
+  },
+  {
+    "id": "act-1792132850581",
+    "timestamp": "2026-10-16T06:40:50.581121+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (64.7ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 64.65
+    }
+  },
+  {
+    "id": "act-1792132848276",
+    "timestamp": "2026-10-16T06:40:48.276893+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 95.26% confidence (0.3ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.9525741338729858,
+      "inference_time_ms": 0.34
+    }
+  },
+  {
+    "id": "act-1792132848223",
+    "timestamp": "2026-10-16T06:40:48.223162+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 90.00% confidence (19.0ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.8999999761581421,
+      "inference_time_ms": 18.98
+    }
+  },
+  {
+    "id": "act-1792132846949",
+    "timestamp": "2026-10-16T06:40:46.949514+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 88.76% confidence (18.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.8876,
+      "inference_time_ms": 18.4
+    }
+  },
+  {
+    "id": "act-1792132846922",
+    "timestamp": "2026-10-16T06:40:46.922170+00:00",
+    "event_type": "TRAINING_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Test training completed",
+    "metadata": {
+      "val_acc": 0.95
+    }
+  },
+  {
+    "id": "act-1792132846881",
+    "timestamp": "2026-10-16T06:40:46.881662+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 864.91
+    }
+  },
+  {
+    "id": "act-1792132845515",
+    "timestamp": "2026-10-16T06:40:45.515117+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 803.72
+    }
+  },
+  {
+    "id": "act-1792132611336",
+    "timestamp": "2026-10-16T06:36:51.336724+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 577.84
+    }
+  },
+  {
+    "id": "act-1792132610679",
+    "timestamp": "2026-10-16T06:36:50.679289+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 863.7
+    }
+  },
+  {
+    "id": "act-1792132609741",
+    "timestamp": "2026-10-16T06:36:49.741661+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (64.7ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 64.68
+    }
+  },
+  {
+    "id": "act-1792132609230",
+    "timestamp": "2026-10-16T06:36:49.231010+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (153.9ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 153.89
+    }
+  },
+  {
+    "id": "act-1792132024275",
+    "timestamp": "2026-10-16T06:27:04.275480+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 1190.0
+    }
+  },
+  {
+    "id": "act-1792131998737",
+    "timestamp": "2026-10-16T06:26:38.737616+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 97.05% confidence (428.9ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9704924821853638,
+      "inference_time_ms": 428.95
+    }
+  },
+  {
+    "id": "act-1792098750662",
+    "timestamp": "2026-10-15T21:12:30.662119+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 1196.83
+    }
+  },
+  {
+    "id": "act-1792098749356",
+    "timestamp": "2026-10-15T21:12:29.356246+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 87.48% confidence (150.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.8747518062591553,
+      "inference_time_ms": 150.39
+    }
+  },
+  {
+    "id": "act-1792098748651",
+    "timestamp": "2026-10-15T21:12:28.651484+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (170.6ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 170.63
+    }
+  },
+  {
+    "id": "act-1792098492690",
+    "timestamp": "2026-10-15T21:08:12.690987+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (63.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 63.36
+    }
+  },
+  {
+    "id": "act-1792098491877",
+    "timestamp": "2026-10-15T21:08:11.877092+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (64.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 64.44
+    }
+  },
+  {
+    "id": "act-1792098489797",
+    "timestamp": "2026-10-15T21:08:09.797249+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 95.26% confidence (0.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.9525741338729858,
+      "inference_time_ms": 0.22
+    }
+  },
+  {
+    "id": "act-1792098489770",
+    "timestamp": "2026-10-15T21:08:09.770968+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 90.00% confidence (10.7ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.8999999761581421,
+      "inference_time_ms": 10.66
+    }
+  },
+  {
+    "id": "act-1792098488755",
+    "timestamp": "2026-10-15T21:08:08.755325+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 88.76% confidence (18.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.8876,
+      "inference_time_ms": 18.4
+    }
+  },
+  {
+    "id": "act-1792098488732",
+    "timestamp": "2026-10-15T21:08:08.732412+00:00",
+    "event_type": "TRAINING_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Test training completed",
+    "metadata": {
+      "val_acc": 0.95
+    }
+  },
+  {
+    "id": "act-1792098488691",
+    "timestamp": "2026-10-15T21:08:08.691037+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 504.69
+    }
+  },
+  {
+    "id": "act-1792098487407",
+    "timestamp": "2026-10-15T21:08:07.407653+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 884.55
+    }
+  },
+  {
+    "id": "act-1792098415237",
+    "timestamp": "2026-10-15T21:06:55.237495+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (34.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 34.23
+    }
+  },
+  {
+    "id": "act-1792098414280",
+    "timestamp": "2026-10-15T21:06:54.280972+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (84.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 84.15
+    }
+  },
+  {
+    "id": "act-1792098412929",
+    "timestamp": "2026-10-15T21:06:52.929703+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 95.26% confidence (0.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.9525741338729858,
+      "inference_time_ms": 0.41
+    }
+  },
+  {
+    "id": "act-1792098412891",
+    "timestamp": "2026-10-15T21:06:52.891959+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 90.00% confidence (11.8ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.8999999761581421,
+      "inference_time_ms": 11.84
+    }
+  },
+  {
+    "id": "act-1792098411736",
+    "timestamp": "2026-10-15T21:06:51.736956+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 88.76% confidence (18.4ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.8876,
+      "inference_time_ms": 18.4
+    }
+  },
+  {
+    "id": "act-1792098411708",
+    "timestamp": "2026-10-15T21:06:51.708774+00:00",
+    "event_type": "TRAINING_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Test training completed",
+    "metadata": {
+      "val_acc": 0.95
+    }
+  },
+  {
+    "id": "act-1792098411656",
+    "timestamp": "2026-10-15T21:06:51.656683+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 470.08
+    }
+  },
+  {
+    "id": "act-1792098410648",
+    "timestamp": "2026-10-15T21:06:50.648823+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 839.05
+    }
+  },
+  {
+    "id": "act-1792097769466",
+    "timestamp": "2026-10-15T20:56:09.466693+00:00",
+    "event_type": "TRAINING_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Transfer learning training completed for EfficientNetB0 (5 epochs, Best Val Acc: 93.13%).",
+    "metadata": {
+      "best_val_acc": 0.9312977099236641,
+      "epochs": 5
+    }
+  },
+  {
+    "id": "act-1792097391174",
+    "timestamp": "2026-10-15T20:49:51.174941+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Normal with 72.65% confidence (87.9ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Normal",
+      "confidence": 0.72652268409729,
+      "inference_time_ms": 87.91
+    }
+  },
+  {
+    "id": "act-1792097384439",
+    "timestamp": "2026-10-15T20:49:44.439606+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 97.20% confidence (53.5ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9719831347465515,
+      "inference_time_ms": 53.54
+    }
+  },
+  {
+    "id": "act-1792097378224",
+    "timestamp": "2026-10-15T20:49:38.224430+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 97.20% confidence (188.9ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9719831347465515,
+      "inference_time_ms": 188.92
+    }
+  },
+  {
+    "id": "act-1792097083300",
+    "timestamp": "2026-10-15T20:44:43.300601+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 705.93
+    }
+  },
+  {
+    "id": "act-1792097082545",
+    "timestamp": "2026-10-15T20:44:42.545562+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9992432594299316,
+      "inference_time_ms": 1548.05
+    }
+  },
+  {
+    "id": "act-1792097080930",
+    "timestamp": "2026-10-15T20:44:40.930647+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 97.18% confidence (85.3ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9717755913734436,
+      "inference_time_ms": 85.32
+    }
+  },
+  {
+    "id": "act-1792097080341",
+    "timestamp": "2026-10-15T20:44:40.341803+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 100.00% confidence (229.3ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9999983310699463,
+      "inference_time_ms": 229.34
+    }
+  },
+  {
+    "id": "act-1792096242150",
+    "timestamp": "2026-10-15T20:30:42.150033+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "efficientnet_b0",
+    "description": "Generated Grad-CAM attention heatmap for EfficientNetB0 (features[-1]). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "features[-1]",
+      "predicted_class": "Pneumonia",
+      "confidence": 1.0,
+      "inference_time_ms": 389.4
+    }
+  },
+  {
+    "id": "act-1792096241703",
+    "timestamp": "2026-10-15T20:30:41.703827+00:00",
+    "event_type": "GRADCAM_GENERATED",
+    "model_name": "resnet50",
+    "description": "Generated Grad-CAM attention heatmap for ResNet50 (layer4). Attention target: Pneumonia.",
+    "metadata": {
+      "target_layer": "layer4",
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9992432594299316,
+      "inference_time_ms": 776.27
+    }
+  },
+  {
+    "id": "act-1792096240876",
+    "timestamp": "2026-10-15T20:30:40.876233+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 97.18% confidence (74.5ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9717755913734436,
+      "inference_time_ms": 74.48
+    }
+  },
+  {
+    "id": "act-1792096240363",
+    "timestamp": "2026-10-15T20:30:40.363728+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 100.00% confidence (138.0ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9999983310699463,
+      "inference_time_ms": 138.04
+    }
+  },
+  {
+    "id": "act-1792096169660",
+    "timestamp": "2026-10-15T20:29:29.660263+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "efficientnet_b0",
+    "description": "Predicted Pneumonia with 78.55% confidence (138.1ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.7854909300804138,
+      "inference_time_ms": 138.11
+    }
+  },
+  {
+    "id": "act-1792096168497",
+    "timestamp": "2026-10-15T20:29:28.497805+00:00",
+    "event_type": "PREDICTION_COMPLETED",
+    "model_name": "resnet50",
+    "description": "Predicted Pneumonia with 95.08% confidence (54.2ms) on CPU.",
+    "metadata": {
+      "predicted_class": "Pneumonia",
+      "confidence": 0.9507610201835632,
+      "inference_time_ms": 54.25
+    }
+  }
+]
