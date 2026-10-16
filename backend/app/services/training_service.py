@@ -38,10 +38,28 @@ class TrainingService:
     def _initialize_from_disk(self) -> None:
         """Scan checkpoints and output directory to restore state from previous runs."""
         for model_name, spec in MODEL_SPECS.items():
-            checkpoint_file = settings.CHECKPOINT_DIR / spec["default_checkpoint"]
+            checkpoint_filename = spec["default_checkpoint"]
+            search_dirs = [
+                settings.CHECKPOINT_DIR,
+                settings.BASE_DIR / "checkpoints",
+                Path.cwd() / "backend" / "checkpoints",
+                Path.cwd() / "checkpoints",
+                settings.BASE_DIR.parent / "backend" / "checkpoints",
+            ]
+            checkpoint_file = None
+            for d in search_dirs:
+                p1 = d / model_name / "best.pt"
+                p2 = d / checkpoint_filename
+                if p1.exists() and p1.stat().st_size > 0:
+                    checkpoint_file = p1
+                    break
+                elif p2.exists() and p2.stat().st_size > 0:
+                    checkpoint_file = p2
+                    break
+
             history_file = settings.OUTPUT_DIR / f"{model_name}_training_history.json"
 
-            if checkpoint_file.exists() and checkpoint_file.stat().st_size > 0:
+            if checkpoint_file is not None:
                 # Load saved history if available
                 history: List[EpochMetric] = []
                 best_acc: Optional[float] = None

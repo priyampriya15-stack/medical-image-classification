@@ -31,14 +31,23 @@ def resolve_checkpoint_path(model_name: str) -> Path:
     if not spec:
         raise ValueError(f"Unknown model architecture '{model_name}'.")
 
-    candidate_paths = [
-        settings.CHECKPOINT_DIR / model_name / "best.pt",
-        settings.CHECKPOINT_DIR / spec["default_checkpoint"],
+    checkpoint_filename = spec["default_checkpoint"]
+    search_dirs = [
+        settings.CHECKPOINT_DIR,
+        settings.BASE_DIR / "checkpoints",
+        Path.cwd() / "backend" / "checkpoints",
+        Path.cwd() / "checkpoints",
+        settings.BASE_DIR.parent / "backend" / "checkpoints",
     ]
+
+    candidate_paths = []
+    for d in search_dirs:
+        candidate_paths.append(d / model_name / "best.pt")
+        candidate_paths.append(d / checkpoint_filename)
 
     for path in candidate_paths:
         if path.exists() and path.is_file() and path.stat().st_size > 0:
-            return path
+            return path.resolve()
 
     raise FileNotFoundError(
         f"Model has not been trained yet. No task checkpoint found for '{model_name}' "

@@ -10,11 +10,14 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api"
     FRONTEND_ORIGIN: str = "http://localhost:5173"
 
+    HOST: str = "0.0.0.0"
+    PORT: int = 8001
+
     # Base filesystem paths relative to backend root
     BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
-    DATA_DIR: Path = BASE_DIR / "data"
-    CHECKPOINT_DIR: Path = BASE_DIR / "checkpoints"
-    OUTPUT_DIR: Path = BASE_DIR / "outputs"
+    DATA_DIR: Path = Path(__file__).resolve().parent.parent.parent / "data"
+    CHECKPOINT_DIR: Path = Path(__file__).resolve().parent.parent.parent / "checkpoints"
+    OUTPUT_DIR: Path = Path(__file__).resolve().parent.parent.parent / "outputs"
 
     # Optional manual device override ("cpu", "cuda", etc.)
     DEVICE: Optional[str] = None

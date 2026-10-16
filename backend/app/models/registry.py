@@ -46,9 +46,23 @@ def check_task_checkpoint(model_name: str) -> Tuple[bool, Optional[str]]:
     if not spec:
         return False, None
 
-    checkpoint_file = settings.CHECKPOINT_DIR / spec["default_checkpoint"]
-    if checkpoint_file.exists() and checkpoint_file.is_file() and checkpoint_file.stat().st_size > 0:
-        return True, str(checkpoint_file)
+    checkpoint_filename = spec["default_checkpoint"]
+    search_dirs = [
+        settings.CHECKPOINT_DIR,
+        settings.BASE_DIR / "checkpoints",
+        Path.cwd() / "backend" / "checkpoints",
+        Path.cwd() / "checkpoints",
+        settings.BASE_DIR.parent / "backend" / "checkpoints",
+    ]
+
+    for d in search_dirs:
+        p1 = d / model_name / "best.pt"
+        p2 = d / checkpoint_filename
+        if p1.exists() and p1.is_file() and p1.stat().st_size > 0:
+            return True, str(p1.resolve())
+        elif p2.exists() and p2.is_file() and p2.stat().st_size > 0:
+            return True, str(p2.resolve())
+
     return False, None
 
 

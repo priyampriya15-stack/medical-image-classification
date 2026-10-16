@@ -93,7 +93,7 @@ export const ProjectInfoPage: React.FC = () => {
             <span className="text-[11px] sm:text-xs font-bold text-slate-900 block font-mono truncate">
               {isConnected ? 'Connected' : 'Disconnected'}
             </span>
-            <span className="text-[10px] text-slate-400 block truncate">Port 8001 &bull; REST API</span>
+            <span className="text-[10px] text-slate-400 block truncate">REST API &bull; {isConnected ? 'Active' : 'Offline'}</span>
           </div>
 
           {/* 2. Device */}

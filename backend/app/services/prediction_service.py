@@ -94,14 +94,23 @@ class PredictionService:
                 f"Unsupported model '{model_name}'. Supported models: {list(MODEL_SPECS.keys())}"
             )
 
-        candidates = [
-            settings.CHECKPOINT_DIR / model_name / "best.pt",
-            settings.CHECKPOINT_DIR / spec["default_checkpoint"],
+        checkpoint_filename = spec["default_checkpoint"]
+        search_dirs = [
+            settings.CHECKPOINT_DIR,
+            settings.BASE_DIR / "checkpoints",
+            Path.cwd() / "backend" / "checkpoints",
+            Path.cwd() / "checkpoints",
+            settings.BASE_DIR.parent / "backend" / "checkpoints",
         ]
+
+        candidates = []
+        for d in search_dirs:
+            candidates.append(d / model_name / "best.pt")
+            candidates.append(d / checkpoint_filename)
 
         for p in candidates:
             if p.exists() and p.is_file() and p.stat().st_size > 0:
-                return p
+                return p.resolve()
 
         raise ModelNotTrainedError("Trained model checkpoint is not available. Model has not been trained yet.")
 

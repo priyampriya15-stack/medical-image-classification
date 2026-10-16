@@ -62,7 +62,19 @@ class DatasetService:
 
     @property
     def dataset_path(self) -> Path:
-        return self.data_dir / DATASET_FILENAME
+        candidate_dirs = [
+            self.data_dir,
+            settings.DATA_DIR,
+            settings.BASE_DIR / "data",
+            Path.cwd() / "backend" / "data",
+            Path.cwd() / "data",
+            settings.BASE_DIR.parent / "backend" / "data",
+        ]
+        for d in candidate_dirs:
+            p = d / DATASET_FILENAME
+            if p.exists() and p.is_file() and p.stat().st_size > 0:
+                return p.resolve()
+        return (self.data_dir / DATASET_FILENAME).resolve()
 
     def is_available(self) -> bool:
         """Check if pneumoniamnist.npz exists and is readable."""

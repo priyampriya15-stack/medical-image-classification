@@ -1,0 +1,43 @@
+services:
+  # ============================================================================
+  # 1. FastAPI Research Platform Backend API (Render Web Service)
+  # ============================================================================
+  - type: web
+    name: medical-image-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DEVICE
+        value: cpu
+      - key: API_PREFIX
+        value: /api
+      - key: FRONTEND_ORIGIN
+        sync: false
+        # Note: Set this in Render Dashboard to your Frontend Static Site URL,
+        # e.g., https://medical-image-frontend.onrender.com
+
+  # ============================================================================
+  # 2. React + TypeScript + Vite Research Platform Frontend (Render Static Site)
+  # ============================================================================
+  - type: web
+    name: medical-image-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        sync: false
+        # Note: Set this in Render Dashboard to your Backend Web Service API URL,
+        # e.g., https://medical-image-api.onrender.com/api

@@ -26,18 +26,37 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Configure CORS specifically for local development frontend
-origins = [
-    settings.FRONTEND_ORIGIN,
+import os
+
+# Configure CORS allowed origins for research platform frontend clients
+configured_origins = []
+if settings.FRONTEND_ORIGIN:
+    configured_origins.extend([o.strip() for o in settings.FRONTEND_ORIGIN.split(",") if o.strip()])
+
+raw_origins = [
+    *configured_origins,
     "http://127.0.0.1:5173",
     "http://localhost:5173",
     "http://127.0.0.1:5174",
     "http://localhost:5174",
+    "http://127.0.0.1:5175",
+    "http://localhost:5175",
+    "http://127.0.0.1:5176",
+    "http://localhost:5176",
 ]
+
+# Clean trailing slashes, strip whitespace, and preserve order while deduplicating
+origins: list[str] = []
+for origin in raw_origins:
+    if isinstance(origin, str):
+        cleaned_origin = origin.strip().rstrip("/")
+        if cleaned_origin and cleaned_origin not in origins:
+            origins.append(cleaned_origin)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"^https://.*\.onrender\.com$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -70,3 +89,11 @@ def root():
         "documentation": "/docs",
         "health": f"{settings.API_PREFIX}/health",
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", settings.PORT))
+    host = os.environ.get("HOST", settings.HOST)
+    uvicorn.run("app.main:app", host=host, port=port, reload=False)
+

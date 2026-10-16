@@ -16,7 +16,7 @@ import { RecentActivityCard } from '../components/dashboard/RecentActivityCard';
 import { QuickActionsCard } from '../components/dashboard/QuickActionsCard';
 import { ProjectInfoCard } from '../components/dashboard/ProjectInfoCard';
 import { CardSkeleton } from '../components/common/LoadingSkeleton';
-import { medicalApi } from '../services/api';
+import { medicalApi, API_BASE_URL } from '../services/api';
 import type {
   DatasetInfo,
   ModelMetadata,
@@ -74,7 +74,7 @@ export const DashboardPage: React.FC = () => {
     } catch (err: unknown) {
       console.error('Failed to load dashboard metrics:', err);
       setErrorMessage(
-        'Could not connect to the backend API. Please ensure the server is running on port 8001.'
+        `Could not connect to the backend API at ${API_BASE_URL}. Please ensure the server is running.`
       );
     } finally {
       setLoading(false);
@@ -100,7 +100,7 @@ export const DashboardPage: React.FC = () => {
               <span>
                 {errorMessage ||
                   `Could not connect to FastAPI server at ${
-                    health?.serverUrl || 'http://127.0.0.1:8001/api'
+                    health?.serverUrl || API_BASE_URL
                   }. Please verify backend is running.`}
               </span>
             </div>
