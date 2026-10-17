@@ -76,11 +76,17 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-# Attach aggregate API routers
+from app.api.health import get_health
+from app.schemas.health import HealthResponse
+
+# Attach aggregate API routers under /api prefix (e.g. /api/health, /api/predict, etc.)
 app.include_router(api_router, prefix=settings.API_PREFIX)
 
 
-@app.get("/")
+# Root discovery endpoints (supports /, /api, /api/)
+@app.get("/", tags=["General"])
+@app.get("/api", tags=["General"])
+@app.get("/api/", tags=["General"])
 def root():
     return {
         "service": settings.APP_NAME,
@@ -89,6 +95,15 @@ def root():
         "documentation": "/docs",
         "health": f"{settings.API_PREFIX}/health",
     }
+
+
+# Direct health check aliases at root level (supports /health, /health/)
+# in addition to standard /api/health from api_router
+@app.get("/health", response_model=HealthResponse, tags=["Health"])
+@app.get("/health/", response_model=HealthResponse, tags=["Health"])
+def health_root_alias():
+    """Direct root health check alias so both /health and /api/health return full health status."""
+    return get_health()
 
 
 if __name__ == "__main__":

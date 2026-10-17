@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Optional
 import torch
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +10,14 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     API_PREFIX: str = "/api"
     FRONTEND_ORIGIN: str = "http://localhost:5173"
+
+    @field_validator("API_PREFIX", mode="after")
+    @classmethod
+    def clean_api_prefix(cls, v: str) -> str:
+        if not v or v.strip() in ("", "/"):
+            return "/api"
+        return "/" + v.strip().strip("/")
+
 
     HOST: str = "0.0.0.0"
     PORT: int = 8001

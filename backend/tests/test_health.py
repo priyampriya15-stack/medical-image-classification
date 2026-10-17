@@ -18,5 +18,25 @@ def test_health_endpoint():
     assert "python_version" in data
     assert "models" in data
     assert isinstance(data["models"], dict)
-    assert "resnet50" in data["models"]
-    assert "efficientnet_b0" in data["models"]
+    assert data["models"]["resnet50"] is True
+    assert data["models"]["efficientnet_b0"] is True
+
+
+def test_health_root_alias():
+    response = client.get("/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+    assert data["service"] == "Medical Image Classification API"
+    assert data["models"]["resnet50"] is True
+    assert data["models"]["efficientnet_b0"] is True
+
+
+def test_root_endpoint():
+    for path in ["/", "/api", "/api/"]:
+        response = client.get(path)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["service"] == "Medical Image Classification API"
+        assert data["health"] == "/api/health"
+
