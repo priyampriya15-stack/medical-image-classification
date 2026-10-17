@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, ArrowRight } from 'lucide-react';
 import type { ActivityEvent } from '../../types';
+import { EmptyState } from '../common/EmptyState';
 
 interface RecentActivityCardProps {
   activities?: ActivityEvent[];
@@ -14,55 +15,34 @@ export const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  // Helper to format ISO timestamp to human friendly "Today, 10:24 AM"
+  // Helper to format ISO timestamp accurately
   const formatTime = (isoString?: string) => {
-    if (!isoString) return 'Just now';
+    if (!isoString) return '—';
     try {
       const date = new Date(isoString);
       if (isNaN(date.getTime())) return isoString;
+      const now = new Date();
+      const isToday =
+        date.getDate() === now.getDate() &&
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear();
+
       const hours = date.getHours();
       const minutes = date.getMinutes().toString().padStart(2, '0');
       const ampm = hours >= 12 ? 'PM' : 'AM';
       const formattedHours = hours % 12 || 12;
-      return `Today, ${formattedHours}:${minutes} ${ampm}`;
+      const timeStr = `${formattedHours}:${minutes} ${ampm}`;
+
+      return isToday
+        ? `Today, ${timeStr}`
+        : `${date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}, ${timeStr}`;
     } catch {
-      return 'Today';
+      return '—';
     }
   };
 
-  // Default baseline events matching research timeline if backend has fewer events
-  const defaultEvents = [
-    {
-      id: 'default-1',
-      title: 'Dataset loaded',
-      description: 'PneumoniaMNIST (5,216 images)',
-      time: 'Today, 10:24 AM',
-      dotColor: 'bg-teal-500',
-    },
-    {
-      id: 'default-2',
-      title: 'Training completed',
-      description: 'ResNet50 - 94.2% accuracy',
-      time: 'Today, 08:17 AM',
-      dotColor: 'bg-emerald-500',
-    },
-    {
-      id: 'default-3',
-      title: 'Model comparison ready',
-      description: 'ResNet50 vs EfficientNetB0',
-      time: 'Today, 07:45 AM',
-      dotColor: 'bg-purple-500',
-    },
-    {
-      id: 'default-4',
-      title: 'Application started',
-      description: 'Backend and frontend running',
-      time: 'Today, 07:30 AM',
-      dotColor: 'bg-blue-500',
-    },
-  ];
-
   // Map real backend activities if available
+
   const displayItems =
     activities && activities.length > 0
       ? activities.slice(0, 4).map((act, idx) => {
@@ -79,6 +59,9 @@ export const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
           } else if (act.event_type === 'TRAINING_COMPLETED') {
             title = 'Training completed';
             desc = `${act.model_name} transfer learning finished`;
+          } else if (act.event_type === 'EVALUATION_COMPLETED') {
+            title = 'Evaluation finished';
+            desc = act.description || `${act.model_name} test-set evaluation`;
           }
 
           return {
@@ -89,7 +72,8 @@ export const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
             dotColor: dotColors[idx % dotColors.length],
           };
         })
-      : defaultEvents;
+      : [];
+
 
   return (
     <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between">
@@ -121,7 +105,7 @@ export const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
               <div key={i} className="h-10 bg-slate-100 rounded-lg" />
             ))}
           </div>
-        ) : (
+        ) : displayItems.length > 0 ? (
           <div className="space-y-4">
             {displayItems.map((item) => (
               <div key={item.id} className="flex items-start justify-between gap-2">
@@ -143,7 +127,14 @@ export const RecentActivityCard: React.FC<RecentActivityCardProps> = ({
               </div>
             ))}
           </div>
+        ) : (
+          <EmptyState
+            compact
+            title="No Recent Activity"
+            description="Run model inference or Grad-CAM visualization to record activity telemetry."
+          />
         )}
+
       </div>
     </div>
   );

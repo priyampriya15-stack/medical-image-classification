@@ -166,7 +166,7 @@ export const LoginPage: React.FC = () => {
                   <Cpu className="w-3 h-3 text-blue-400" />
                   RESNET50
                 </span>
-                <span className="text-[10px] font-mono text-blue-300 font-semibold">25.6M params</span>
+                <span className="text-[10px] font-mono text-blue-300 font-semibold">Residual</span>
               </div>
               <p className="text-[10px] text-slate-400">Deep residual bottlenecks</p>
             </div>
@@ -177,7 +177,7 @@ export const LoginPage: React.FC = () => {
                   <Cpu className="w-3 h-3 text-cyan-400" />
                   EFFICIENTNET-B0
                 </span>
-                <span className="text-[10px] font-mono text-cyan-300 font-semibold">5.3M params</span>
+                <span className="text-[10px] font-mono text-cyan-300 font-semibold">MBConv</span>
               </div>
               <p className="text-[10px] text-slate-400">Compound scaled MBConv</p>
             </div>

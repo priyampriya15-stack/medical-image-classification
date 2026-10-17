@@ -15,13 +15,19 @@ interface PredictionResultCardProps {
 export const PredictionResultCard: React.FC<PredictionResultCardProps> = ({
   prediction,
 }) => {
-  const predClass = prediction.predicted_class || prediction.prediction?.class || 'Normal';
-  const predConf = prediction.confidence ?? prediction.prediction?.confidence ?? 0;
-  const classIdx = prediction.class_index ?? prediction.prediction?.class_index ?? (predClass === 'Pneumonia' ? 1 : 0);
+  const predClass = prediction.predicted_class || prediction.prediction?.class || 'Not available';
+  const predConf = prediction.confidence ?? prediction.prediction?.confidence ?? null;
+  const classIdx = prediction.class_index ?? prediction.prediction?.class_index ?? null;
   const isPneumonia = predClass === 'Pneumonia';
-  const confidencePercent = (predConf * 100).toFixed(2);
-  const normalPercent = ((prediction.probabilities?.Normal ?? (isPneumonia ? 1 - predConf : predConf)) * 100).toFixed(2);
-  const pneumoniaPercent = ((prediction.probabilities?.Pneumonia ?? (isPneumonia ? predConf : 1 - predConf)) * 100).toFixed(2);
+  const confidencePercent = predConf !== null ? (predConf * 100).toFixed(2) : '—';
+  const normalProb = prediction.probabilities?.Normal;
+  const pneumoniaProb = prediction.probabilities?.Pneumonia;
+  const normalPercent = normalProb !== undefined && normalProb !== null ? (normalProb * 100).toFixed(2) : '—';
+  const pneumoniaPercent = pneumoniaProb !== undefined && pneumoniaProb !== null ? (pneumoniaProb * 100).toFixed(2) : '—';
+  const sumProb = normalProb !== undefined && pneumoniaProb !== undefined ? (normalProb + pneumoniaProb).toFixed(4) : '—';
+  const infTime = prediction.inference_time_ms;
+  const infTimeDisplay = infTime !== undefined && infTime !== null ? `${infTime.toFixed(1)} ms` : '—';
+  const imageInputDisplay = prediction.image ? `${prediction.image.width}×${prediction.image.height} (${prediction.image.format})` : '—';
   const modelName = prediction.model?.display_name || (prediction.model_name === 'efficientnet_b0' ? 'EfficientNetB0' : 'ResNet50');
 
   return (
@@ -70,7 +76,7 @@ export const PredictionResultCard: React.FC<PredictionResultCardProps> = ({
                     : 'bg-teal-500/20 text-teal-300 border-teal-500/30'
                 }`}
               >
-                Index: {classIdx}
+                Index: {classIdx !== null ? classIdx : '—'}
               </span>
             </div>
           </div>
@@ -80,10 +86,10 @@ export const PredictionResultCard: React.FC<PredictionResultCardProps> = ({
               Confidence Score
             </span>
             <span className="text-xl sm:text-2xl md:text-3xl font-mono font-extrabold text-blue-400 block">
-              {confidencePercent}%
+              {confidencePercent !== '—' ? `${confidencePercent}%` : '—'}
             </span>
             <span className="text-[11px] text-slate-400 block font-mono">
-              p = {predConf.toFixed(4)}
+              {predConf !== null ? `p = ${predConf.toFixed(4)}` : 'p = —'}
             </span>
           </div>
         </div>
@@ -97,7 +103,7 @@ export const PredictionResultCard: React.FC<PredictionResultCardProps> = ({
             Softmax Class Probabilities
           </h4>
           <span className="text-[11px] font-mono text-slate-400">
-            sum = {(Number(normalPercent) / 100 + Number(pneumoniaPercent) / 100).toFixed(4)}
+            sum = {sumProb}
           </span>
         </div>
 
@@ -169,7 +175,7 @@ export const PredictionResultCard: React.FC<PredictionResultCardProps> = ({
             Inference Time
           </span>
           <span className="font-mono font-bold text-slate-800 block">
-            {(prediction.inference_time_ms ?? 0).toFixed(1)} ms
+            {infTimeDisplay}
           </span>
         </div>
 
@@ -188,7 +194,7 @@ export const PredictionResultCard: React.FC<PredictionResultCardProps> = ({
             Image Input
           </span>
           <span className="font-mono text-slate-700 text-[11px] truncate block">
-            {prediction.image ? `${prediction.image.width}×${prediction.image.height} (${prediction.image.format})` : '224×224 (Pillow)'}
+            {imageInputDisplay}
           </span>
         </div>
       </div>

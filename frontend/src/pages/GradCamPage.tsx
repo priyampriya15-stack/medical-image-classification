@@ -236,7 +236,7 @@ export const GradCamPage: React.FC = () => {
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-card">
           <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
             <span className="text-xs font-bold text-slate-800">1. Input Radiograph</span>
-            <span className="text-[10px] font-mono text-slate-400">224 x 224</span>
+            <span className="text-[10px] font-mono text-slate-400 truncate max-w-[140px]">{file ? file.name : '—'}</span>
           </div>
           <div className="h-60 sm:h-64 rounded-xl overflow-hidden bg-slate-950 flex items-center justify-center relative">
             {gradcamResult ? (

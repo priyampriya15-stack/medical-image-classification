@@ -15,25 +15,28 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { medicalApi } from '../services/api';
-import type { BackendHealth, AnalyticsSummaryResponse } from '../types';
+import type { BackendHealth, AnalyticsSummaryResponse, ModelInfo } from '../types';
 
 export const ProjectInfoPage: React.FC = () => {
   const [health, setHealth] = useState<BackendHealth | null>(null);
   const [summary, setSummary] = useState<AnalyticsSummaryResponse | null>(null);
   const [projectMeta, setProjectMeta] = useState<any>(null);
+  const [models, setModels] = useState<ModelInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const loadStatus = async () => {
     setLoading(true);
     try {
-      const [hData, sData, pData] = await Promise.all([
+      const [hData, sData, pData, mData] = await Promise.all([
         medicalApi.checkHealth().catch(() => null),
         medicalApi.getAnalyticsSummary().catch(() => null),
         medicalApi.getProjectInfo().catch(() => null),
+        medicalApi.getModels().catch(() => []),
       ]);
       setHealth(hData);
       setSummary(sData);
       setProjectMeta(pData);
+      setModels(mData || []);
     } finally {
       setLoading(false);
     }
@@ -44,9 +47,19 @@ export const ProjectInfoPage: React.FC = () => {
   }, []);
 
   const isConnected = Boolean(health?.isConnected);
-  const pytorchVer = health?.pyTorchVersion || '2.14.1+cpu';
+  const pytorchVer = health?.pyTorchVersion || 'Not available';
   const anyTrained = Boolean(summary?.models?.some((m) => m.training_status === 'completed'));
   const anyEvaluated = Boolean(summary?.models?.some((m) => m.evaluation_status === 'completed'));
+
+  const resnetModel = models.find((m) => m.name.toLowerCase().includes('resnet') || m.name.toLowerCase() === 'resnet50');
+  const resnetParams = resnetModel?.total_parameters != null 
+    ? `${resnetModel.total_parameters.toLocaleString()} parameters` 
+    : 'Parameters not available';
+
+  const effnetModel = models.find((m) => m.name.toLowerCase().includes('efficient') || m.name.toLowerCase() === 'efficientnet_b0');
+  const effnetParams = effnetModel?.total_parameters != null 
+    ? `${effnetModel.total_parameters.toLocaleString()} parameters` 
+    : 'Parameters not available';
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
@@ -80,7 +93,7 @@ export const ProjectInfoPage: React.FC = () => {
               Operational System Status & Runtime Telemetry
             </h2>
           </div>
-          <span className="text-[10px] sm:text-[11px] font-mono text-slate-400">Host: Local Development Environment</span>
+          <span className="text-[10px] sm:text-[11px] font-mono text-slate-400">Environment: {isConnected ? 'Backend Active' : 'Offline'}</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
@@ -118,7 +131,7 @@ export const ProjectInfoPage: React.FC = () => {
               {pytorchVer}
             </span>
             <span className="text-[10px] text-slate-400 block truncate">
-              Torchvision {health?.torchvisionVersion || 'Active'}
+              Torchvision: {health?.torchvisionVersion || 'Not available'}
             </span>
           </div>
 
@@ -228,7 +241,7 @@ export const ProjectInfoPage: React.FC = () => {
               ResNet50 Architecture
             </span>
             <span className="text-sm font-bold text-slate-900 block">Deep Residual Network</span>
-            <span className="text-xs text-slate-500 block">23,512,130 parameters &bull; Bottleneck residual skip blocks &bull; layer4 target</span>
+            <span className="text-xs text-slate-500 block">{resnetParams} &bull; Bottleneck residual skip blocks &bull; layer4 target</span>
           </div>
 
           {/* EfficientNetB0 */}
@@ -238,7 +251,7 @@ export const ProjectInfoPage: React.FC = () => {
               EfficientNetB0 Architecture
             </span>
             <span className="text-sm font-bold text-slate-900 block">Compound Scaling Network</span>
-            <span className="text-xs text-slate-500 block">4,010,110 parameters &bull; MBConv + Squeeze-and-Excitation &bull; features[-1] target</span>
+            <span className="text-xs text-slate-500 block">{effnetParams} &bull; MBConv + Squeeze-and-Excitation &bull; features[-1] target</span>
           </div>
 
           {/* Explainability */}

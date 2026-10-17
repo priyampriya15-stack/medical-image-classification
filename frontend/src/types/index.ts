@@ -49,6 +49,8 @@ export interface ModelMetadata {
   checkpoint_path?: string | null;
 }
 
+export type ModelInfo = ModelMetadata;
+
 export interface ModelMetrics {
   accuracy: number | null;
   precision: number | null;

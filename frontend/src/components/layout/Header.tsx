@@ -139,13 +139,13 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu, collapsed })
               aria-expanded={dropdownOpen}
               aria-label="User profile menu"
             >
-              {/* Initials circle PM avatar */}
+              {/* Initials circle avatar */}
               <div className="w-8 h-8 rounded-full bg-[#0B1528] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0 ring-2 ring-blue-500/20">
-                PM
+                {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
               </div>
 
               <span className="text-xs font-semibold text-slate-900 hidden sm:inline">
-                {user?.name || 'Priya M'}
+                {user?.name || 'Researcher'}
               </span>
 
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden sm:block" />
@@ -156,14 +156,14 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileMenu, collapsed })
               <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-1.5rem)] bg-white rounded-2xl shadow-card-hover border border-slate-200/90 py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                 <div className="px-4 py-3 border-b border-slate-100">
                   <p className="text-xs font-bold text-slate-900 truncate">
-                    {user?.name || 'Dr. Elena Vance'}
+                    {user?.name || 'Researcher'}
                   </p>
                   <p className="text-[11px] text-slate-500 truncate">
-                    {user?.email || 'researcher@medai.org'}
+                    {user?.email || '—'}
                   </p>
                   <div className="mt-1.5 flex items-center gap-1 text-[10px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md font-medium border border-blue-100">
                     <ShieldCheck className="w-3 h-3 text-blue-600" />
-                    <span>{user?.institution || 'Biomedical AI Lab'}</span>
+                    <span>{user?.institution || 'Medical Image Lab'}</span>
                   </div>
                 </div>
 

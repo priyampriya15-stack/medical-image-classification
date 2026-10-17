@@ -46,7 +46,7 @@ export const DatasetExplorerPage: React.FC = () => {
         <div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
             <Database className="w-6 h-6 text-blue-600" />
-            Dataset Explorer &bull; {datasetInfo ? datasetInfo.name : 'PneumoniaMNIST'}
+            Dataset Explorer &bull; {datasetInfo ? datasetInfo.name : '—'}
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Standardized pediatric chest radiograph dataset curated for binary classification benchmarking
@@ -204,6 +204,12 @@ export const DatasetExplorerPage: React.FC = () => {
             <CardSkeleton key={i} className="h-48" />
           ))}
         </div>
+      ) : filtered.length === 0 ? (
+        <EmptyState
+          icon={Database}
+          title="No dataset samples available"
+          description="No radiograph samples were returned by the backend API for the current filter."
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filtered.map((item) => (

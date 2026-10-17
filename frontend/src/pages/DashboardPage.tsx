@@ -98,10 +98,7 @@ export const DashboardPage: React.FC = () => {
             <div>
               <span className="font-bold">Backend Disconnected</span> &mdash;{' '}
               <span>
-                {errorMessage ||
-                  `Could not connect to FastAPI server at ${
-                    health?.serverUrl || API_BASE_URL
-                  }. Please verify backend is running.`}
+                {errorMessage || 'Backend unavailable. Please try again.'}
               </span>
             </div>
           </div>
@@ -135,11 +132,11 @@ export const DashboardPage: React.FC = () => {
                 {/* Stat 1: Dataset */}
                 <StatCard
                   label="Dataset"
-                  value={datasetInfo ? datasetInfo.name : 'PneumoniaMNIST'}
+                  value={datasetInfo ? datasetInfo.name : '—'}
                   subValue={
                     datasetInfo?.total_samples
-                      ? `${datasetInfo.total_samples.toLocaleString()} images (example)`
-                      : '5,216 images (example)'
+                      ? `${datasetInfo.total_samples.toLocaleString()} images`
+                      : 'Not available'
                   }
                   icon={Database}
                   iconVariant="blue"
@@ -151,11 +148,15 @@ export const DashboardPage: React.FC = () => {
                 {/* Stat 2: Classes */}
                 <StatCard
                   label="Classes"
-                  value="2"
-                  subValue="Normal, Pneumonia"
+                  value={datasetInfo?.num_classes !== undefined ? `${datasetInfo.num_classes}` : '—'}
+                  subValue={
+                    datasetInfo?.classes
+                      ? datasetInfo.classes.join(', ')
+                      : 'Not available'
+                  }
                   icon={Layers}
                   iconVariant="purple"
-                  badge="2-"
+                  badge={datasetInfo?.num_classes !== undefined ? `${datasetInfo.num_classes}-` : undefined}
                   linkText="View Classes"
                   linkPath="/dataset"
                 />
@@ -163,8 +164,12 @@ export const DashboardPage: React.FC = () => {
                 {/* Stat 3: Models */}
                 <StatCard
                   label="Models"
-                  value={models.length ? `${models.length}` : '2'}
-                  subValue="ResNet50, EfficientNetB0"
+                  value={models.length ? `${models.length}` : '—'}
+                  subValue={
+                    models.length
+                      ? models.map((m) => m.display_name).join(', ')
+                      : 'Not available'
+                  }
                   icon={Cpu}
                   iconVariant="emerald"
                   linkText="View Models"
@@ -174,8 +179,12 @@ export const DashboardPage: React.FC = () => {
                 {/* Stat 4: Best Model */}
                 <StatCard
                   label="Best Model"
-                  value={bestModel ? bestModel.display_name : 'ResNet50'}
-                  subValue="(Based on validation performance)"
+                  value={bestModel ? bestModel.display_name : 'Not available'}
+                  subValue={
+                    bestModel
+                      ? `${bestModel.primary_metric || 'Score'}: ${(bestModel.value * 100).toFixed(1)}%`
+                      : 'No evaluation available'
+                  }
                   icon={Award}
                   iconVariant="amber"
                   linkText="View Comparison"
@@ -206,12 +215,12 @@ export const DashboardPage: React.FC = () => {
 
           {/* Project Information Card */}
           <ProjectInfoCard
-            datasetName={datasetInfo?.name || 'PneumoniaMNIST'}
-            classCount={datasetInfo?.num_classes || 2}
+            datasetName={datasetInfo?.name || '—'}
+            classCount={datasetInfo?.num_classes || 0}
             modelNames={
               models.length > 0
-                ? models.map((m) => m.name)
-                : ['ResNet50', 'EfficientNetB0']
+                ? models.map((m) => m.display_name)
+                : []
             }
             frameworkStack="PyTorch + FastAPI + React"
           />

@@ -21,7 +21,7 @@ import type {
   TrainingHistoryResponse,
 } from '../types';
 
-const rawBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://127.0.0.1:8001';
+const rawBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://medical-image-api-umzu.onrender.com/api';
 export const API_BASE_URL = rawBase.endsWith('/api') ? rawBase : `${rawBase.replace(/\/+$/, '')}/api`;
 
 
@@ -32,6 +32,23 @@ export const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+export function formatDurationSeconds(seconds: number | null | undefined): string {
+  if (!seconds || seconds <= 0) return 'Not available';
+  const s = Math.round(seconds);
+  if (s >= 3600) {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    return `${h}h ${m}m`;
+  }
+  if (s >= 60) {
+    const m = Math.floor(s / 60);
+    const remS = s % 60;
+    return remS > 0 ? `${m}m ${remS}s` : `${m}m`;
+  }
+  return `${s}s`;
+}
+
 
 // Request interceptor to attach auth token
 apiClient.interceptors.request.use(
@@ -179,7 +196,7 @@ export const medicalApi = {
         progress: job.progress_percent,
         bestValScore: job.best_val_acc,
         bestEpoch: job.best_epoch,
-        duration: job.elapsed_seconds ? `${Math.round(job.elapsed_seconds)}s` : '--',
+        duration: formatDurationSeconds(job.elapsed_seconds),
         learningRate: job.learning_rate,
         batchSize: job.batch_size,
         optimizer: job.optimizer,
@@ -217,9 +234,10 @@ export const medicalApi = {
       progress: job.progress_percent,
       bestValScore: job.best_val_acc,
       bestEpoch: job.best_epoch,
-      duration: job.elapsed_seconds ? `${Math.round(job.elapsed_seconds)}s` : '--',
+      duration: formatDurationSeconds(job.elapsed_seconds),
       learningRate: job.learning_rate,
       batchSize: job.batch_size,
+
       optimizer: job.optimizer,
       fineTuning: job.fine_tune,
       history: job.history,

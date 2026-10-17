@@ -34,6 +34,7 @@ import type {
   RocResponse,
   PrecisionRecallResponse,
   TrainingHistoryResponse,
+  ModelInfo,
 } from '../types';
 import { medicalApi, triggerBrowserDownload } from '../services/api';
 import { EmptyState } from '../components/common/EmptyState';
@@ -45,6 +46,7 @@ export const TrainingAnalyticsPage: React.FC = () => {
   const [resnetJob, setResnetJob] = useState<TrainingJob | null>(null);
   const [effnetJob, setEffnetJob] = useState<TrainingJob | null>(null);
   const [summary, setSummary] = useState<AnalyticsSummaryResponse | null>(null);
+  const [models, setModels] = useState<ModelInfo[]>([]);
   const [trainingHistory, setTrainingHistory] = useState<TrainingHistoryResponse | null>(null);
   const [confusionMatrix, setConfusionMatrix] = useState<ConfusionMatrixResponse | null>(null);
   const [rocData, setRocData] = useState<RocResponse | null>(null);
@@ -63,7 +65,7 @@ export const TrainingAnalyticsPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const [rRep, eRep, rJob, eJob, sum, tHist, cMat, rData, prData] = await Promise.all([
+      const [rRep, eRep, rJob, eJob, sum, tHist, cMat, rData, prData, mList] = await Promise.all([
         medicalApi.getEvaluationResult('resnet50').catch(() => null),
         medicalApi.getEvaluationResult('efficientnet_b0').catch(() => null),
         medicalApi.getModelTrainingStatus('resnet50').catch(() => null),
@@ -73,6 +75,7 @@ export const TrainingAnalyticsPage: React.FC = () => {
         medicalApi.getConfusionMatrix().catch(() => null),
         medicalApi.getRocCurve().catch(() => null),
         medicalApi.getPrecisionRecallCurve().catch(() => null),
+        medicalApi.getModels().catch(() => []),
       ]);
 
       setResnetReport(rRep);
@@ -84,6 +87,7 @@ export const TrainingAnalyticsPage: React.FC = () => {
       setConfusionMatrix(cMat);
       setRocData(rData);
       setPrecisionRecallData(prData);
+      setModels(mList || []);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to load research analytics.');
     } finally {
@@ -142,6 +146,61 @@ export const TrainingAnalyticsPage: React.FC = () => {
   const activeReport = selectedModel === 'resnet50' ? resnetReport : effnetReport;
   const activeJob = selectedModel === 'resnet50' ? resnetJob : effnetJob;
   const m = activeReport?.metrics;
+
+  const resnetModel = models.find((mod) => mod.name.toLowerCase().includes('resnet') || mod.name.toLowerCase() === 'resnet50');
+  const effnetModel = models.find((mod) => mod.name.toLowerCase().includes('efficient') || mod.name.toLowerCase() === 'efficientnet_b0');
+
+  const resnetParamsStr = resnetModel?.total_parameters != null
+    ? `${(resnetModel.total_parameters / 1e6).toFixed(1)}M (${resnetModel.total_parameters.toLocaleString()})`
+    : 'Not available';
+
+  const effnetParamsStr = effnetModel?.total_parameters != null
+    ? `${(effnetModel.total_parameters / 1e6).toFixed(1)}M (${effnetModel.total_parameters.toLocaleString()})`
+    : 'Not available';
+
+  const getParamBadge = () => {
+    if (!resnetModel?.total_parameters || !effnetModel?.total_parameters) {
+      return <span className="text-slate-400 font-mono text-[11px]">—</span>;
+    }
+    const ratio = (resnetModel.total_parameters / effnetModel.total_parameters).toFixed(1);
+    return (
+      <span className="px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 font-semibold text-[11px]">
+        EfficientNetB0 ({ratio}x smaller)
+      </span>
+    );
+  };
+
+  const getStrongerBadge = (
+    resVal: number | undefined | null,
+    effVal: number | undefined | null,
+    higherIsBetter: boolean = true
+  ) => {
+    if (resVal == null || effVal == null) {
+      return <span className="text-slate-400 font-mono text-[11px]">—</span>;
+    }
+    const diff = (resVal - effVal) * 100;
+    if (Math.abs(diff) < 0.001) {
+      return (
+        <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold text-[11px]">
+          Equivalent
+        </span>
+      );
+    }
+    const resnetWon = higherIsBetter ? diff > 0 : diff < 0;
+    const absDiff = Math.abs(diff).toFixed(2);
+    if (resnetWon) {
+      return (
+        <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold text-[11px]">
+          ResNet50 (+{absDiff}%)
+        </span>
+      );
+    }
+    return (
+      <span className="px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 font-semibold text-[11px]">
+        EfficientNetB0 (+{absDiff}%)
+      </span>
+    );
+  };
 
   // Confusion Matrices
   const resnetCm = (confusionMatrix && confusionMatrix.resnet50)
@@ -318,7 +377,7 @@ export const TrainingAnalyticsPage: React.FC = () => {
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              ResNet50 (23.5M Parameters)
+              ResNet50 {resnetModel?.total_parameters ? `(${((resnetModel.total_parameters / 1e6).toFixed(1))}M Parameters)` : ''}
             </button>
             <button
               onClick={() => setSelectedModel('efficientnet_b0')}
@@ -328,7 +387,7 @@ export const TrainingAnalyticsPage: React.FC = () => {
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              EfficientNetB0 (4.0M Parameters)
+              EfficientNetB0 {effnetModel?.total_parameters ? `(${((effnetModel.total_parameters / 1e6).toFixed(1))}M Parameters)` : ''}
             </button>
           </div>
         </div>
@@ -348,7 +407,7 @@ export const TrainingAnalyticsPage: React.FC = () => {
             Section 1 &bull; Training Performance & Convergence
           </h2>
           <span className="text-xs text-slate-400 font-mono">
-            {selectedModel === 'resnet50' ? 'ResNet50' : 'EfficientNetB0'} &bull; 5 Epochs Fine-Tuning
+            {selectedModel === 'resnet50' ? 'ResNet50' : 'EfficientNetB0'} &bull; {activeJob?.totalEpochs ? `${activeJob.totalEpochs} Epochs Fine-Tuning` : 'Fine-Tuning'}
           </span>
         </div>
 
@@ -702,9 +761,9 @@ export const TrainingAnalyticsPage: React.FC = () => {
             <span>Section 4 &bull; Receiver Operating Characteristic (ROC) Comparison</span>
           </h2>
           <div className="flex items-center gap-2 sm:gap-3 text-xs font-mono flex-wrap">
-            <span className="text-blue-700 font-semibold">ResNet50 AUC: {(resnetReport?.metrics.roc_auc ? resnetReport.metrics.roc_auc * 100 : 0).toFixed(2)}%</span>
+            <span className="text-blue-700 font-semibold">ResNet50 AUC: {resnetReport?.metrics.roc_auc != null ? `${(resnetReport.metrics.roc_auc * 100).toFixed(2)}%` : 'Not available'}</span>
             <span>&bull;</span>
-            <span className="text-cyan-700 font-semibold">EfficientNetB0 AUC: {(effnetReport?.metrics.roc_auc ? effnetReport.metrics.roc_auc * 100 : 0).toFixed(2)}%</span>
+            <span className="text-cyan-700 font-semibold">EfficientNetB0 AUC: {effnetReport?.metrics.roc_auc != null ? `${(effnetReport.metrics.roc_auc * 100).toFixed(2)}%` : 'Not available'}</span>
           </div>
         </div>
 
@@ -890,87 +949,75 @@ export const TrainingAnalyticsPage: React.FC = () => {
               <tbody className="divide-y divide-slate-100 font-mono">
                 <tr>
                   <td className="py-3 px-4 font-sans font-medium text-slate-700">Total Parameters</td>
-                  <td className="py-3 px-4 text-slate-900">25.6M (23.5M weights)</td>
-                  <td className="py-3 px-4 text-slate-900">5.3M (4.0M weights)</td>
+                  <td className="py-3 px-4 text-slate-900">{resnetParamsStr}</td>
+                  <td className="py-3 px-4 text-slate-900">{effnetParamsStr}</td>
                   <td className="py-3 px-4 font-sans">
-                    <span className="px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 font-semibold text-[11px]">
-                      EfficientNetB0 (5.8x smaller)
-                    </span>
+                    {getParamBadge()}
                   </td>
                 </tr>
 
                 <tr>
                   <td className="py-3 px-4 font-sans font-medium text-slate-700">ROC-AUC (Primary Metric)</td>
                   <td className="py-3 px-4 text-slate-900 font-bold">
-                    {resnetReport?.metrics.roc_auc ? `${(resnetReport.metrics.roc_auc * 100).toFixed(2)}%` : '--'}
+                    {resnetReport?.metrics.roc_auc != null ? `${(resnetReport.metrics.roc_auc * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 text-cyan-700 font-bold">
-                    {effnetReport?.metrics.roc_auc ? `${(effnetReport.metrics.roc_auc * 100).toFixed(2)}%` : '--'}
+                    {effnetReport?.metrics.roc_auc != null ? `${(effnetReport.metrics.roc_auc * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 font-sans">
-                    <span className="px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 font-semibold text-[11px]">
-                      EfficientNetB0 (+0.89%)
-                    </span>
+                    {getStrongerBadge(resnetReport?.metrics.roc_auc, effnetReport?.metrics.roc_auc)}
                   </td>
                 </tr>
 
                 <tr>
                   <td className="py-3 px-4 font-sans font-medium text-slate-700">Accuracy</td>
                   <td className="py-3 px-4 text-blue-700 font-bold">
-                    {resnetReport?.metrics.accuracy ? `${(resnetReport.metrics.accuracy * 100).toFixed(2)}%` : '--'}
+                    {resnetReport?.metrics.accuracy != null ? `${(resnetReport.metrics.accuracy * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 text-slate-900">
-                    {effnetReport?.metrics.accuracy ? `${(effnetReport.metrics.accuracy * 100).toFixed(2)}%` : '--'}
+                    {effnetReport?.metrics.accuracy != null ? `${(effnetReport.metrics.accuracy * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 font-sans">
-                    <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold text-[11px]">
-                      ResNet50 (+2.08%)
-                    </span>
+                    {getStrongerBadge(resnetReport?.metrics.accuracy, effnetReport?.metrics.accuracy)}
                   </td>
                 </tr>
 
                 <tr>
                   <td className="py-3 px-4 font-sans font-medium text-slate-700">Sensitivity / Recall</td>
                   <td className="py-3 px-4 text-blue-700 font-bold">
-                    {resnetReport?.metrics.sensitivity ? `${(resnetReport.metrics.sensitivity * 100).toFixed(2)}%` : '--'}
+                    {resnetReport?.metrics.sensitivity != null ? `${(resnetReport.metrics.sensitivity * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 text-slate-900">
-                    {effnetReport?.metrics.sensitivity ? `${(effnetReport.metrics.sensitivity * 100).toFixed(2)}%` : '--'}
+                    {effnetReport?.metrics.sensitivity != null ? `${(effnetReport.metrics.sensitivity * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 font-sans">
-                    <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold text-[11px]">
-                      ResNet50 (+1.54%)
-                    </span>
+                    {getStrongerBadge(resnetReport?.metrics.sensitivity, effnetReport?.metrics.sensitivity)}
                   </td>
                 </tr>
 
                 <tr>
                   <td className="py-3 px-4 font-sans font-medium text-slate-700">Specificity</td>
                   <td className="py-3 px-4 text-blue-700 font-bold">
-                    {resnetReport?.metrics.specificity ? `${(resnetReport.metrics.specificity * 100).toFixed(2)}%` : '--'}
+                    {resnetReport?.metrics.specificity != null ? `${(resnetReport.metrics.specificity * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 text-slate-900">
-                    {effnetReport?.metrics.specificity ? `${(effnetReport.metrics.specificity * 100).toFixed(2)}%` : '--'}
+                    {effnetReport?.metrics.specificity != null ? `${(effnetReport.metrics.specificity * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 font-sans">
-                    <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold text-[11px]">
-                      ResNet50 (+2.99%)
-                    </span>
+                    {getStrongerBadge(resnetReport?.metrics.specificity, effnetReport?.metrics.specificity)}
                   </td>
                 </tr>
 
                 <tr>
                   <td className="py-3 px-4 font-sans font-medium text-slate-700">F1 Score</td>
                   <td className="py-3 px-4 text-blue-700 font-bold">
-                    {resnetReport?.metrics.f1 ? `${(resnetReport.metrics.f1 * 100).toFixed(2)}%` : '--'}
+                    {resnetReport?.metrics.f1 != null ? `${(resnetReport.metrics.f1 * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 text-slate-900">
-                    {effnetReport?.metrics.f1 ? `${(effnetReport.metrics.f1 * 100).toFixed(2)}%` : '--'}
+                    {effnetReport?.metrics.f1 != null ? `${(effnetReport.metrics.f1 * 100).toFixed(2)}%` : 'Not available'}
                   </td>
                   <td className="py-3 px-4 font-sans">
-                    <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold text-[11px]">
-                      ResNet50 (+1.48%)
-                    </span>
+                    {getStrongerBadge(resnetReport?.metrics.f1, effnetReport?.metrics.f1)}
                   </td>
                 </tr>
               </tbody>
@@ -979,8 +1026,11 @@ export const TrainingAnalyticsPage: React.FC = () => {
 
           <div className="p-4 bg-slate-50 border-t border-slate-200 text-xs text-slate-600">
             <strong>Comparative Decision Context:</strong> Best performance depends on the selected evaluation metric.
-            EfficientNetB0 offers higher threshold-independent discrimination (ROC-AUC) and compact parameter size,
-            while ResNet50 achieves higher overall accuracy and sensitivity on the fixed 0.5 classification threshold.
+            {resnetReport?.metrics && effnetReport?.metrics ? (
+              <span> Comparative metrics are computed directly from the held-out evaluation dataset partitions.</span>
+            ) : (
+              <span> Evaluation metrics will update automatically once both models complete test set evaluation.</span>
+            )}
           </div>
         </div>
       </div>

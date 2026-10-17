@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { medicalApi } from '../services/api';
-import type { ModelMetadata, ModelEvaluation, ModelComparisonResponse } from '../types';
+import type { ModelMetadata, ModelEvaluation, ModelComparisonResponse, TrainingJob, ConfusionMatrixResponse } from '../types';
 import { ModelPerformanceCard } from '../components/dashboard/ModelPerformanceCard';
 
 export const ModelComparisonPage: React.FC = () => {
@@ -18,6 +18,8 @@ export const ModelComparisonPage: React.FC = () => {
   const [models, setModels] = useState<ModelMetadata[]>([]);
   const [evaluations, setEvaluations] = useState<ModelEvaluation[]>([]);
   const [comparison, setComparison] = useState<ModelComparisonResponse | null>(null);
+  const [trainingJobs, setTrainingJobs] = useState<TrainingJob[]>([]);
+  const [confusionMatrix, setConfusionMatrix] = useState<ConfusionMatrixResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,14 +27,18 @@ export const ModelComparisonPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const [modelList, evalList, compData] = await Promise.all([
+      const [modelList, evalList, compData, jobs, cMat] = await Promise.all([
         medicalApi.getModels(),
         medicalApi.getModelEvaluations(),
         medicalApi.getEvaluationComparison().catch(() => null),
+        medicalApi.getTrainingStatus().catch(() => []),
+        medicalApi.getConfusionMatrix().catch(() => null),
       ]);
       setModels(modelList);
       setEvaluations(evalList);
       setComparison(compData);
+      setTrainingJobs(jobs);
+      setConfusionMatrix(cMat);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to connect to backend model registry');
     } finally {
@@ -49,6 +55,22 @@ export const ModelComparisonPage: React.FC = () => {
 
   const resnetMeta = models.find((m) => m.name === 'resnet50');
   const effnetMeta = models.find((m) => m.name === 'efficientnet_b0');
+
+  const resnetJob = trainingJobs.find((j) => j.modelId === 'resnet50');
+  const effnetJob = trainingJobs.find((j) => j.modelId === 'efficientnet_b0');
+
+  const resnetCm = confusionMatrix?.resnet50;
+  const effnetCm = confusionMatrix?.efficientnet_b0;
+
+  const totalTestSamples = resnetCm
+    ? (resnetCm.true_positive ?? 0) + (resnetCm.true_negative ?? 0) + (resnetCm.false_positive ?? 0) + (resnetCm.false_negative ?? 0)
+    : null;
+  const totalPneumoniaCases = resnetCm
+    ? (resnetCm.true_positive ?? 0) + (resnetCm.false_negative ?? 0)
+    : null;
+  const totalNormalCases = resnetCm
+    ? (resnetCm.true_negative ?? 0) + (resnetCm.false_positive ?? 0)
+    : null;
 
   const bothEvaluated = Boolean(resnetEval?.evaluated && effnetEval?.evaluated);
   const bestModelKey = comparison?.best_model;
@@ -198,7 +220,7 @@ export const ModelComparisonPage: React.FC = () => {
               <div className="flex items-center justify-between mb-2">
                 <span className="font-bold text-sm text-blue-900">ResNet50</span>
                 <span className="text-[10px] font-mono font-semibold bg-white px-2 py-0.5 rounded text-blue-700 border border-blue-200">
-                  {resnetMeta?.total_parameters ? `${(resnetMeta.total_parameters / 1e6).toFixed(1)}M Weights` : '23.5M Weights'}
+                  {resnetMeta?.total_parameters ? `${(resnetMeta.total_parameters / 1e6).toFixed(1)}M Parameters` : 'Not available'}
                 </span>
               </div>
               <p className="text-[11px] text-blue-800 leading-tight">
@@ -210,7 +232,7 @@ export const ModelComparisonPage: React.FC = () => {
               <div className="flex items-center justify-between mb-2">
                 <span className="font-bold text-sm text-cyan-900">EfficientNetB0</span>
                 <span className="text-[10px] font-mono font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">
-                  {effnetMeta?.total_parameters ? `${paramRatio ? `${paramRatio.toFixed(1)}x Smaller ` : ''}(${(effnetMeta.total_parameters / 1e6).toFixed(1)}M)` : '4.0M'}
+                  {effnetMeta?.total_parameters ? `${paramRatio ? `${paramRatio.toFixed(1)}x Smaller ` : ''}(${(effnetMeta.total_parameters / 1e6).toFixed(1)}M)` : 'Not available'}
                 </span>
               </div>
               <p className="text-[11px] text-cyan-800 leading-tight">
@@ -276,9 +298,11 @@ export const ModelComparisonPage: React.FC = () => {
                 </div>
               </div>
               <p className="text-[11px] text-slate-500">
-                {resnetEval?.accuracy && effnetEval?.accuracy
-                  ? `ResNet50 correctly predicted ${Math.round(resnetEval.accuracy * 624)}/624 vs ${Math.round(effnetEval.accuracy * 624)}/624 for EfficientNetB0.`
-                  : 'Computed across the 624 held-out PneumoniaMNIST test radiographs.'}
+                {resnetCm && effnetCm && totalTestSamples
+                  ? `ResNet50 correctly predicted ${(resnetCm.true_positive ?? 0) + (resnetCm.true_negative ?? 0)}/${totalTestSamples} vs ${(effnetCm.true_positive ?? 0) + (effnetCm.true_negative ?? 0)}/${totalTestSamples} for EfficientNetB0.`
+                  : totalTestSamples
+                  ? `Computed across the ${totalTestSamples} held-out PneumoniaMNIST test radiographs.`
+                  : 'Computed across held-out test radiographs.'}
               </p>
             </div>
 
@@ -307,9 +331,9 @@ export const ModelComparisonPage: React.FC = () => {
                 </div>
               </div>
               <p className="text-[11px] text-slate-500">
-                Pneumonia detection rate (
-                {resnetEval?.sensitivity ? `${Math.round(resnetEval.sensitivity * 390)}/390` : '--'} vs{' '}
-                {effnetEval?.sensitivity ? `${Math.round(effnetEval.sensitivity * 390)}/390` : '--'} true positives).
+                {resnetCm && effnetCm && totalPneumoniaCases
+                  ? `Pneumonia detection rate (${resnetCm.true_positive}/${totalPneumoniaCases} vs ${effnetCm.true_positive}/${totalPneumoniaCases} true positives).`
+                  : 'Pneumonia detection rate across true positives.'}
               </p>
             </div>
 
@@ -338,9 +362,9 @@ export const ModelComparisonPage: React.FC = () => {
                 </div>
               </div>
               <p className="text-[11px] text-slate-500">
-                Normal radiograph true negative rate (
-                {resnetEval?.specificity ? `${Math.round(resnetEval.specificity * 234)}/234` : '--'} vs{' '}
-                {effnetEval?.specificity ? `${Math.round(effnetEval.specificity * 234)}/234` : '--'}).
+                {resnetCm && effnetCm && totalNormalCases
+                  ? `Normal radiograph true negative rate (${resnetCm.true_negative}/${totalNormalCases} vs ${effnetCm.true_negative}/${totalNormalCases}).`
+                  : 'Normal radiograph true negative rate.'}
               </p>
             </div>
 
@@ -394,10 +418,10 @@ export const ModelComparisonPage: React.FC = () => {
               <tr>
                 <td className="py-3 px-4 font-sans font-semibold text-slate-800">Parameters</td>
                 <td className="py-3 px-4 text-slate-800">
-                  {resnetMeta?.total_parameters ? `${resnetMeta.total_parameters.toLocaleString()} (${(resnetMeta.total_parameters / 1e6).toFixed(1)}M)` : '23.5M'}
+                  {resnetMeta?.total_parameters ? `${resnetMeta.total_parameters.toLocaleString()} (${(resnetMeta.total_parameters / 1e6).toFixed(1)}M)` : 'Not available'}
                 </td>
                 <td className="py-3 px-4 font-bold text-emerald-700 bg-emerald-50/40">
-                  {effnetMeta?.total_parameters ? `${effnetMeta.total_parameters.toLocaleString()} (${(effnetMeta.total_parameters / 1e6).toFixed(1)}M)` : '4.0M'}
+                  {effnetMeta?.total_parameters ? `${effnetMeta.total_parameters.toLocaleString()} (${(effnetMeta.total_parameters / 1e6).toFixed(1)}M)` : 'Not available'}
                   {paramRatio && (
                     <span className="ml-2 font-sans font-semibold text-[10px] text-emerald-800 bg-emerald-100 px-1.5 py-0.2 rounded">
                       {paramRatio.toFixed(1)}x Smaller *
@@ -411,10 +435,10 @@ export const ModelComparisonPage: React.FC = () => {
               <tr>
                 <td className="py-3 px-4 font-sans font-semibold text-slate-800">Trainable Parameters</td>
                 <td className="py-3 px-4 text-slate-800">
-                  {resnetMeta?.trainable_parameters ? resnetMeta.trainable_parameters.toLocaleString() : '23,512,130'}
+                  {resnetMeta?.trainable_parameters ? resnetMeta.trainable_parameters.toLocaleString() : 'Not available'}
                 </td>
                 <td className="py-3 px-4 font-bold text-emerald-700 bg-emerald-50/40">
-                  {effnetMeta?.trainable_parameters ? effnetMeta.trainable_parameters.toLocaleString() : '4,010,110'}
+                  {effnetMeta?.trainable_parameters ? effnetMeta.trainable_parameters.toLocaleString() : 'Not available'}
                 </td>
                 <td className="py-3 px-4 font-sans text-slate-500">Full backbone fine-tuning parameters on CPU</td>
               </tr>
@@ -422,9 +446,21 @@ export const ModelComparisonPage: React.FC = () => {
               {/* Row 4: Training Status */}
               <tr>
                 <td className="py-3 px-4 font-sans font-semibold text-slate-800">Training Status</td>
-                <td className="py-3 px-4 font-sans font-semibold text-emerald-700">Completed (5 Epochs)</td>
-                <td className="py-3 px-4 font-sans font-semibold text-emerald-700">Completed (5 Epochs)</td>
-                <td className="py-3 px-4 font-sans text-slate-500">Converged transfer learning checkpoints saved</td>
+                <td className="py-3 px-4 font-sans font-semibold text-emerald-700">
+                  {resnetJob?.status === 'completed'
+                    ? `Completed (${resnetJob.currentEpoch ?? resnetJob.totalEpochs} Epochs)`
+                    : resnetJob?.status
+                    ? resnetJob.status
+                    : 'Not available'}
+                </td>
+                <td className="py-3 px-4 font-sans font-semibold text-emerald-700">
+                  {effnetJob?.status === 'completed'
+                    ? `Completed (${effnetJob.currentEpoch ?? effnetJob.totalEpochs} Epochs)`
+                    : effnetJob?.status
+                    ? effnetJob.status
+                    : 'Not available'}
+                </td>
+                <td className="py-3 px-4 font-sans text-slate-500">Transfer learning checkpoints and telemetry</td>
               </tr>
 
               {/* Row 5: Evaluation Status */}
@@ -454,8 +490,8 @@ export const ModelComparisonPage: React.FC = () => {
                   {effnetEval?.accuracy ? `${(effnetEval.accuracy * 100).toFixed(2)}%` : 'Not evaluated'}
                 </td>
                 <td className="py-3 px-4 font-sans text-slate-500">
-                  {resnetEval?.accuracy && effnetEval?.accuracy
-                    ? `ResNet50 correctly predicted ${Math.round(resnetEval.accuracy * 624)}/624 vs ${Math.round(effnetEval.accuracy * 624)}/624 for EfficientNetB0`
+                  {resnetCm && effnetCm && totalTestSamples
+                    ? `ResNet50 correctly predicted ${(resnetCm.true_positive ?? 0) + (resnetCm.true_negative ?? 0)}/${totalTestSamples} vs ${(effnetCm.true_positive ?? 0) + (effnetCm.true_negative ?? 0)}/${totalTestSamples} for EfficientNetB0`
                     : 'Evaluated on held-out test split'}
                 </td>
               </tr>
@@ -494,7 +530,9 @@ export const ModelComparisonPage: React.FC = () => {
                   {effnetEval?.sensitivity ? `${(effnetEval.sensitivity * 100).toFixed(2)}%` : 'Not evaluated'}
                 </td>
                 <td className="py-3 px-4 font-sans text-slate-500">
-                  Pneumonia detection rate ({resnetEval?.sensitivity ? Math.round(resnetEval.sensitivity * 390) : '--'}/390 vs {effnetEval?.sensitivity ? Math.round(effnetEval.sensitivity * 390) : '--'}/390 true positives)
+                  {resnetCm && effnetCm && totalPneumoniaCases
+                    ? `Pneumonia detection rate (${resnetCm.true_positive}/${totalPneumoniaCases} vs ${effnetCm.true_positive}/${totalPneumoniaCases} true positives)`
+                    : 'Pneumonia detection rate'}
                 </td>
               </tr>
 
@@ -513,7 +551,9 @@ export const ModelComparisonPage: React.FC = () => {
                   {effnetEval?.specificity ? `${(effnetEval.specificity * 100).toFixed(2)}%` : 'Not evaluated'}
                 </td>
                 <td className="py-3 px-4 font-sans text-slate-500">
-                  Normal true negative rate ({resnetEval?.specificity ? Math.round(resnetEval.specificity * 234) : '--'}/234 vs {effnetEval?.specificity ? Math.round(effnetEval.specificity * 234) : '--'}/234)
+                  {resnetCm && effnetCm && totalNormalCases
+                    ? `Normal true negative rate (${resnetCm.true_negative}/${totalNormalCases} vs ${effnetCm.true_negative}/${totalNormalCases})`
+                    : 'Normal true negative rate'}
                 </td>
               </tr>
 

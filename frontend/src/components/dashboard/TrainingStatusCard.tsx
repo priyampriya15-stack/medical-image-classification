@@ -16,31 +16,51 @@ export const TrainingStatusCard: React.FC<TrainingStatusCardProps> = ({
   const resnetJob = jobs.find((j) => j.modelId === 'resnet50');
   const efficientnetJob = jobs.find((j) => j.modelId === 'efficientnet_b0');
 
-  // Derive model display rows
+  // Check if real telemetry is present for either model
+  const hasTelemetry = Boolean(
+    (resnetJob && (resnetJob.status === 'completed' || resnetJob.status === 'training' || resnetJob.currentEpoch > 0)) ||
+    (efficientnetJob && (efficientnetJob.status === 'completed' || efficientnetJob.status === 'training' || efficientnetJob.currentEpoch > 0))
+  );
+
+  // Derive model display rows strictly from real job telemetry
   const modelRows = [
     {
       id: 'resnet50',
       name: 'ResNet50',
-      status: resnetJob?.status || (resnetJob ? 'completed' : 'completed'),
-      progress: resnetJob?.progress ?? 100,
-      epochs: resnetJob ? `${resnetJob.currentEpoch}` : '30',
-      bestAcc: resnetJob?.bestValScore
-        ? `${(resnetJob.bestValScore * 100).toFixed(1)}%`
-        : '94.2%',
-      duration: resnetJob?.duration || '2h 14m',
+      status: resnetJob?.status || 'Not available',
+      progress: resnetJob?.progress ?? 0,
+      epochs: resnetJob?.totalEpochs && resnetJob.totalEpochs > 0
+        ? `${resnetJob.currentEpoch} / ${resnetJob.totalEpochs}`
+        : resnetJob?.currentEpoch && resnetJob.currentEpoch > 0
+        ? `${resnetJob.currentEpoch}`
+        : '—',
+      bestAcc:
+        resnetJob?.bestValScore !== null && resnetJob?.bestValScore !== undefined
+          ? `${(resnetJob.bestValScore * 100).toFixed(1)}%`
+          : '—',
+      duration:
+        resnetJob?.duration && resnetJob.duration !== '--'
+          ? resnetJob.duration
+          : '—',
     },
     {
       id: 'efficientnet_b0',
       name: 'EfficientNetB0',
-      status: efficientnetJob?.status || 'completed',
-      progress: efficientnetJob?.progress ?? 100,
-      epochs: efficientnetJob
+      status: efficientnetJob?.status || 'Not available',
+      progress: efficientnetJob?.progress ?? 0,
+      epochs: efficientnetJob?.totalEpochs && efficientnetJob.totalEpochs > 0
         ? `${efficientnetJob.currentEpoch} / ${efficientnetJob.totalEpochs}`
-        : '30 / 30',
-      bestAcc: efficientnetJob?.bestValScore
-        ? `${(efficientnetJob.bestValScore * 100).toFixed(1)}%`
-        : '91.7%',
-      duration: efficientnetJob?.duration || '1h 32m',
+        : efficientnetJob?.currentEpoch && efficientnetJob.currentEpoch > 0
+        ? `${efficientnetJob.currentEpoch}`
+        : '—',
+      bestAcc:
+        efficientnetJob?.bestValScore !== null && efficientnetJob?.bestValScore !== undefined
+          ? `${(efficientnetJob.bestValScore * 100).toFixed(1)}%`
+          : '—',
+      duration:
+        efficientnetJob?.duration && efficientnetJob.duration !== '--'
+          ? efficientnetJob.duration
+          : '—',
     },
   ];
 
@@ -66,11 +86,11 @@ export const TrainingStatusCard: React.FC<TrainingStatusCardProps> = ({
             <div className="h-20 bg-slate-100 rounded-xl" />
             <div className="h-20 bg-slate-100 rounded-xl" />
           </div>
-        ) : jobs.length === 0 && !resnetJob && !efficientnetJob ? (
+        ) : !hasTelemetry && jobs.length === 0 ? (
           <EmptyState
             compact
-            title="Training status unavailable"
-            description="No training telemetry is currently recorded."
+            title="No training telemetry available"
+            description="Initiate model training to stream live epoch telemetry."
           />
         ) : (
           <div className="space-y-5">

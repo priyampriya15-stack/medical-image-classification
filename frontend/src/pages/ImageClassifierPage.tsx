@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { medicalApi } from '../services/api';
 import { PredictionResultCard } from '../components/classifier/PredictionResultCard';
-import type { SinglePredictionResponse, ModelId } from '../types';
+import type { SinglePredictionResponse, ModelId, ModelMetadata } from '../types';
 
 const ALLOWED_MIME_TYPES = [
   'image/jpeg',
@@ -22,30 +22,38 @@ const ALLOWED_MIME_TYPES = [
   'image/webp',
 ];
 
-const MODEL_OPTIONS: { id: ModelId; name: string; params: string; desc: string }[] = [
-  {
-    id: 'resnet50',
-    name: 'ResNet50',
-    params: '23.5M params',
-    desc: 'Deep residual network with bottleneck blocks',
-  },
-  {
-    id: 'efficientnet_b0',
-    name: 'EfficientNetB0',
-    params: '4.0M params',
-    desc: 'Compound scaling with mobile inverted bottlenecks',
-  },
-];
-
 export const ImageClassifierPage: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<ModelId>('resnet50');
+  const [models, setModels] = useState<ModelMetadata[]>([]);
   const [isPredicting, setIsPredicting] = useState<boolean>(false);
   const [prediction, setPrediction] = useState<SinglePredictionResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    medicalApi.getModels().then(setModels).catch(() => {});
+  }, []);
+
+  const resnetMeta = models.find((m) => m.name === 'resnet50');
+  const effnetMeta = models.find((m) => m.name === 'efficientnet_b0');
+
+  const modelOptions: { id: ModelId; name: string; params: string; desc: string }[] = [
+    {
+      id: 'resnet50',
+      name: 'ResNet50',
+      params: resnetMeta?.total_parameters ? `${(resnetMeta.total_parameters / 1e6).toFixed(1)}M parameters` : '—',
+      desc: 'Deep residual network with bottleneck blocks',
+    },
+    {
+      id: 'efficientnet_b0',
+      name: 'EfficientNetB0',
+      params: effnetMeta?.total_parameters ? `${(effnetMeta.total_parameters / 1e6).toFixed(1)}M parameters` : '—',
+      desc: 'Compound scaling with mobile inverted bottlenecks',
+    },
+  ];
 
   const handleFileSelect = (selectedFile: File) => {
     setErrorMessage(null);
@@ -193,7 +201,7 @@ export const ImageClassifierPage: React.FC = () => {
             </label>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {MODEL_OPTIONS.map((m) => {
+              {modelOptions.map((m) => {
                 const isSelected = selectedModel === m.id;
                 return (
                   <button
@@ -354,11 +362,11 @@ export const ImageClassifierPage: React.FC = () => {
               <div className="pt-6 border-t border-slate-100 grid grid-cols-2 gap-2 text-left text-[11px] text-slate-500">
                 <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
                   <span className="font-semibold block text-slate-700">ResNet50</span>
-                  <span>Deep residual bottleneck network (23.5M weights)</span>
+                  <span>Deep residual bottleneck network{resnetMeta?.total_parameters ? ` (${(resnetMeta.total_parameters / 1e6).toFixed(1)}M parameters)` : ''}</span>
                 </div>
                 <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
                   <span className="font-semibold block text-slate-700">EfficientNetB0</span>
-                  <span>Compound scaled mobile architecture (4.0M weights)</span>
+                  <span>Compound scaled mobile architecture{effnetMeta?.total_parameters ? ` (${(effnetMeta.total_parameters / 1e6).toFixed(1)}M parameters)` : ''}</span>
                 </div>
               </div>
             </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Image as ImageIcon, ArrowRight } from 'lucide-react';
 import type { DatasetSample } from '../../types';
+import { EmptyState } from '../common/EmptyState';
 
 interface DatasetPreviewCardProps {
   samples: DatasetSample[];
@@ -44,6 +45,12 @@ export const DatasetPreviewCard: React.FC<DatasetPreviewCardProps> = ({
               <div key={i} className="h-28 bg-slate-100 rounded-xl" />
             ))}
           </div>
+        ) : samples.length === 0 ? (
+          <EmptyState
+            compact
+            title="No dataset samples"
+            description="Dataset samples are not currently available."
+          />
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {samples.slice(0, 5).map((sample) => {

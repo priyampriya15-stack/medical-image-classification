@@ -14,7 +14,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import type { ModelId, TrainingJob } from '../types';
+import type { ModelId, TrainingJob, DatasetInfo, ModelInfo } from '../types';
 import { medicalApi } from '../services/api';
 import { StatusBadge } from '../components/common/StatusBadge';
 
@@ -38,6 +38,8 @@ export const ModelTrainingPage: React.FC = () => {
 
   // Telemetry state
   const [jobs, setJobs] = useState<TrainingJob[]>([]);
+  const [datasetInfo, setDatasetInfo] = useState<DatasetInfo | null>(null);
+  const [models, setModels] = useState<ModelInfo[]>([]);
   const [loadingJobs, setLoadingJobs] = useState<boolean>(true);
 
   const pollIntervalRef = useRef<number | null>(null);
@@ -56,6 +58,8 @@ export const ModelTrainingPage: React.FC = () => {
 
   useEffect(() => {
     fetchTrainingStatus();
+    medicalApi.getDatasetInfo().then(setDatasetInfo).catch(() => null);
+    medicalApi.getModels().then(setModels).catch(() => []);
   }, []);
 
   // Poll while any job is actively running
@@ -142,6 +146,17 @@ export const ModelTrainingPage: React.FC = () => {
 
   const isModelTraining = activeJob?.status === 'training' || (activeJob?.status as any) === 'running';
 
+  const resnetModel = models.find((m) => m.name.toLowerCase().includes('resnet') || m.name.toLowerCase() === 'resnet50');
+  const effnetModel = models.find((m) => m.name.toLowerCase().includes('efficient') || m.name.toLowerCase() === 'efficientnet_b0');
+
+  const resnetParams = resnetModel?.total_parameters 
+    ? `${(resnetModel.total_parameters / 1e6).toFixed(1)}M Params` 
+    : 'Deep Residual';
+
+  const effnetParams = effnetModel?.total_parameters 
+    ? `${(effnetModel.total_parameters / 1e6).toFixed(1)}M Params` 
+    : 'Compound Scaled';
+
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Page Header */}
@@ -202,7 +217,7 @@ export const ModelTrainingPage: React.FC = () => {
               Training Configuration
             </h3>
             <span className="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md self-start sm:self-auto">
-              PneumoniaMNIST (Train: 4,708 &bull; Val: 524)
+              {datasetInfo ? `${datasetInfo.name} (Train: ${datasetInfo.splits?.train?.toLocaleString() ?? '—'} • Val: ${(datasetInfo.splits?.validation ?? datasetInfo.splits?.val)?.toLocaleString() ?? '—'})` : 'PneumoniaMNIST'}
             </span>
           </div>
 
@@ -232,7 +247,7 @@ export const ModelTrainingPage: React.FC = () => {
                     />
                     <div>
                       <span className="text-sm font-bold text-slate-900 block">ResNet50</span>
-                      <span className="text-xs text-slate-500">23.5M Params &bull; Bottleneck ResNet</span>
+                      <span className="text-xs text-slate-500">{resnetParams} &bull; Bottleneck ResNet</span>
                     </div>
                   </div>
                 </label>
@@ -256,7 +271,7 @@ export const ModelTrainingPage: React.FC = () => {
                     />
                     <div>
                       <span className="text-sm font-bold text-slate-900 block">EfficientNetB0</span>
-                      <span className="text-xs text-slate-500">4.0M Params &bull; MBConv Scaling</span>
+                      <span className="text-xs text-slate-500">{effnetParams} &bull; MBConv Scaling</span>
                     </div>
                   </div>
                 </label>
@@ -426,7 +441,7 @@ export const ModelTrainingPage: React.FC = () => {
                     <span className="font-mono font-bold text-slate-900 text-sm">
                       {activeJob.bestValScore !== null
                         ? `${(activeJob.bestValScore * 100).toFixed(1)}%`
-                        : '--'}
+                        : 'Not available'}
                     </span>
                     {activeJob.bestEpoch && (
                       <span className="text-[10px] text-slate-500 block">@ Epoch {activeJob.bestEpoch}</span>
@@ -439,7 +454,7 @@ export const ModelTrainingPage: React.FC = () => {
                       Duration
                     </span>
                     <span className="font-mono font-bold text-slate-900 text-sm">
-                      {activeJob.duration || '--'}
+                      {activeJob.duration || 'Not available'}
                     </span>
                     <span className="text-[10px] text-slate-500 block">PyTorch CPU</span>
                   </div>

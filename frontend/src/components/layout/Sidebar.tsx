@@ -32,7 +32,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { name: 'Dataset Explorer', path: '/dataset', icon: Database, badge: '5.8k' },
+  { name: 'Dataset Explorer', path: '/dataset', icon: Database },
   { name: 'Model Training', path: '/training', icon: Cpu },
   { name: 'Model Comparison', path: '/model-comparison', icon: GitCompare, aliases: ['/comparison'] },
   { name: 'Image Classifier', path: '/classifier', icon: ScanLine },

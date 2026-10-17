@@ -33,10 +33,8 @@ export const ModelPerformanceCard: React.FC<ModelPerformanceCardProps> = ({
 
   // Check if real evaluations exist
   const hasEvaluations = Boolean(
-    resnet?.isTrained &&
-    efficientnet?.isTrained &&
-    resnet?.metrics.accuracy !== null &&
-    efficientnet?.metrics.accuracy !== null
+    (resnet?.metrics?.accuracy != null && resnet.metrics.accuracy > 0) ||
+    (efficientnet?.metrics?.accuracy != null && efficientnet.metrics.accuracy > 0)
   );
 
   // Recharts data formatted to 2 decimals as shown in screenshot
@@ -127,8 +125,8 @@ export const ModelPerformanceCard: React.FC<ModelPerformanceCardProps> = ({
         {!hasEvaluations || loading ? (
           <EmptyState
             compact
-            title="Evaluation not available"
-            description="Initiate model training and test evaluation to view comparative metrics."
+            title="No evaluation results available yet"
+            description="Run model training and test evaluation to view comparative metrics."
             actionText="Go to Model Training"
             onAction={() => navigate('/training')}
           />
