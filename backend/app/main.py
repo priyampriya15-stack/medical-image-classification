@@ -13,6 +13,25 @@ logging.basicConfig(
 )
 logger = logging.getLogger("medai.backend")
 
+from contextlib import asynccontextmanager
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Log all registered routes at server startup so they appear clearly in Render deployment logs."""
+    print("=== REGISTERED FASTAPI ROUTES ===", flush=True)
+    try:
+        paths = sorted(app.openapi().get("paths", {}).keys())
+        for path in paths:
+            print(f"  [ROUTE] {path}", flush=True)
+            logger.info("Route registered: %s", path)
+        print(f"=== TOTAL ROUTES REGISTERED: {len(paths)} ===", flush=True)
+    except Exception as exc:
+        print(f"Route listing exception: {exc}", flush=True)
+        logger.warning("Could not enumerate routes: %s", exc)
+    yield
+
+
 # Initialize FastAPI application
 app = FastAPI(
     title=settings.APP_NAME,
@@ -24,7 +43,9 @@ app = FastAPI(
     ),
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
+
 
 import os
 
@@ -104,6 +125,7 @@ def root():
 def health_root_alias():
     """Direct root health check alias so both /health and /api/health return full health status."""
     return get_health()
+
 
 
 if __name__ == "__main__":
