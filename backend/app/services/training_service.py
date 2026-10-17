@@ -64,13 +64,8 @@ class TrainingService:
                 history: List[EpochMetric] = []
                 best_acc: Optional[float] = None
                 best_ep: Optional[int] = None
-                config_dict = {
-                    "epochs": 15,
-                    "batch_size": 32,
-                    "learning_rate": 0.001,
-                    "optimizer": "AdamW",
-                    "fine_tune": True,
-                }
+                total_duration: float = 0.0
+                config_dict: Dict[str, Any] = {}
 
                 if history_file.exists():
                     try:
@@ -79,25 +74,35 @@ class TrainingService:
                             history = [EpochMetric(**m) for m in saved_data.get("history", [])]
                             best_acc = saved_data.get("best_val_acc")
                             best_ep = saved_data.get("best_epoch")
+                            total_duration = float(saved_data.get("total_duration_seconds", 0.0))
                             config_dict.update(saved_data.get("config", {}))
+                            if "total_epochs" in saved_data:
+                                config_dict["epochs"] = saved_data["total_epochs"]
                     except Exception as err:
                         logger.warning("Could not read history for %s: %s", model_name, err)
+
+                actual_total_epochs = config_dict.get("epochs") or len(history) or 0
+                last_train_loss = history[-1].train_loss if history else None
+                last_val_loss = history[-1].val_loss if history else None
 
                 self._jobs[model_name] = TrainingJobStatus(
                     job_id=f"job-{model_name}",
                     model_name=model_name,
                     display_name=spec["display_name"],
                     status="completed",
-                    current_epoch=len(history) or config_dict.get("epochs", 15),
-                    total_epochs=config_dict.get("epochs", 15),
-                    progress_percent=100.0,
+                    current_epoch=len(history),
+                    total_epochs=actual_total_epochs,
+                    progress_percent=100.0 if actual_total_epochs > 0 else 0.0,
                     best_val_acc=best_acc,
                     best_epoch=best_ep,
+                    current_train_loss=last_train_loss,
+                    current_val_loss=last_val_loss,
                     learning_rate=config_dict.get("learning_rate", 0.001),
                     batch_size=config_dict.get("batch_size", 32),
                     optimizer=config_dict.get("optimizer", "AdamW"),
                     fine_tune=config_dict.get("fine_tune", True),
                     history=history,
+                    elapsed_seconds=total_duration,
                     checkpoint_saved=True,
                     checkpoint_path=str(checkpoint_file),
                 )
@@ -108,18 +113,22 @@ class TrainingService:
                     display_name=spec["display_name"],
                     status="idle",
                     current_epoch=0,
-                    total_epochs=15,
+                    total_epochs=0,
                     progress_percent=0.0,
                     best_val_acc=None,
                     best_epoch=None,
+                    current_train_loss=None,
+                    current_val_loss=None,
                     learning_rate=0.001,
                     batch_size=32,
                     optimizer="AdamW",
                     fine_tune=True,
                     history=[],
+                    elapsed_seconds=0.0,
                     checkpoint_saved=False,
                     checkpoint_path=None,
                 )
+
 
     def is_any_training_running(self) -> bool:
         """Check if any model is currently undergoing active training."""

@@ -371,6 +371,7 @@ class PredictionService:
                 predicted_class=predicted_class,
                 class_index=class_index,
                 confidence=confidence,
+                inference_time_ms=inference_time_ms,
             ),
             probabilities=ClassProbabilities(
                 Normal=prob_normal,

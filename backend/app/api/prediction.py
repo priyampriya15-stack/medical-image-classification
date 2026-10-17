@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
 from fastapi.responses import JSONResponse
 
@@ -27,11 +28,13 @@ router = APIRouter(tags=["Prediction"])
     ),
 )
 async def predict_image(
-    image: UploadFile = File(..., description="Uploaded chest radiograph image file"),
+    image: Optional[UploadFile] = File(None, description="Uploaded chest radiograph image file"),
+    file: Optional[UploadFile] = File(None, description="Uploaded image file (alias)"),
     model_name: str = Form("resnet50", description="Target model: 'resnet50' or 'efficientnet_b0'"),
 ):
+    upload_file = image or file
     # Validate uploaded file presence
-    if not image or not image.filename:
+    if not upload_file or not upload_file.filename:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"error": "Invalid or corrupted image file", "detail": "No image file provided."},
@@ -39,17 +42,17 @@ async def predict_image(
 
     try:
         # Read file bytes in memory (no disk writing)
-        file_bytes = await image.read()
+        file_bytes = await upload_file.read()
 
         response = prediction_service.predict(
             file_bytes=file_bytes,
-            filename=image.filename,
+            filename=upload_file.filename,
             model_name=model_name,
         )
         return response
 
     except InvalidImageError as exc:
-        logger.warning("Image validation failed for '%s': %s", image.filename, exc)
+        logger.warning("Image validation failed for '%s': %s", upload_file.filename, exc)
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"error": "Invalid or corrupted image file", "detail": str(exc)},
@@ -96,21 +99,23 @@ async def predict_image(
     ),
 )
 async def generate_gradcam_endpoint(
-    image: UploadFile = File(..., description="Chest radiograph image file"),
+    image: Optional[UploadFile] = File(None, description="Chest radiograph image file"),
+    file: Optional[UploadFile] = File(None, description="Chest radiograph image file (alias)"),
     model_name: str = Form("resnet50", description="Target model: 'resnet50' or 'efficientnet_b0'"),
     opacity: float = Form(0.65, description="Overlay alpha blending ratio (0.0 - 1.0)"),
 ):
-    if not image or not image.filename:
+    upload_file = image or file
+    if not upload_file or not upload_file.filename:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"error": "Invalid or corrupted image file", "detail": "No image file provided."},
         )
 
     try:
-        file_bytes = await image.read()
+        file_bytes = await upload_file.read()
         result = gradcam_service.generate_gradcam(
             file_bytes=file_bytes,
-            filename=image.filename,
+            filename=upload_file.filename,
             model_name=model_name,
             alpha=max(0.1, min(1.0, opacity)),
         )

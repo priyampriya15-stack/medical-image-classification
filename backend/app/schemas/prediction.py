@@ -11,6 +11,7 @@ class PredictionResult(BaseModel):
     predicted_class: str
     class_index: int
     confidence: float
+    inference_time_ms: Optional[float] = None
 
     @model_serializer(mode="wrap")
     def serialize_model(self, handler):
